@@ -1,0 +1,7 @@
+fixture_patch_argv  # unused function (tests/conftest.py:14)
+fixture_main  # unused function (tests/conftest.py:29)
+fixture_make_readme  # unused function (tests/conftest.py:46)
+fixture_nocolorcapsys  # unused function (tests/conftest.py:64)
+exc_type  # unused variable (readmetester/src/__init__.py:181)
+exc_val  # unused variable (readmetester/src/__init__.py:182)
+exc_tb  # unused variable (readmetester/src/__init__.py:183)
