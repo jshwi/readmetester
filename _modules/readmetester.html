@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>readmetester &#8212; readmetester 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/graphite.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">readmetester 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">readmetester</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for readmetester</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">readmetester</span>
+<span class="sd">============</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">.src</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CROSS</span><span class="p">,</span>
+    <span class="n">ArgumentParser</span><span class="p">,</span>
+    <span class="n">CatchStdout</span><span class="p">,</span>
+    <span class="n">Holder</span><span class="p">,</span>
+    <span class="n">Mapping</span><span class="p">,</span>
+    <span class="n">Readme</span><span class="p">,</span>
+    <span class="n">Seq</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">,</span>
+    <span class="n">command</span><span class="p">,</span>
+    <span class="n">parenthesis</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.0&quot;</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYCHARM_HOSTED&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span>
+
+
+<div class="viewcode-block" id="OutputDocumentError"><a class="viewcode-back" href="../readmetester.html#readmetester.OutputDocumentError">[docs]</a><span class="k">class</span> <span class="nc">OutputDocumentError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base for errors resulting from incorrectly documented code.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="process"><a class="viewcode-back" href="../readmetester.html#readmetester.process">[docs]</a><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">lines</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">holder</span><span class="p">:</span> <span class="n">Holder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Populate items to their allocated ``list`` object. First split</span>
+<span class="sd">    data by documented commands and documented command output.</span>
+
+<span class="sd">        * Within the command section collect the header with ``total``</span>
+<span class="sd">          and collect the  results from executed commands with ``total``</span>
+<span class="sd">          and ``actual``.</span>
+
+<span class="sd">        * Collect all non-command documentation as command output as</span>
+<span class="sd">          this process is guaranteed to only run within a code-block.</span>
+
+<span class="sd">    :param lines:   Lines from README file.</span>
+<span class="sd">    :param holder:  Holding object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+
+        <span class="c1"># any lines beginning with ``&gt;&gt;&gt; `` or ``... `` are</span>
+        <span class="c1"># considered commands</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&gt;&gt;&gt; &quot;</span><span class="p">,</span> <span class="s2">&quot;... &quot;</span><span class="p">)]):</span>
+            <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append_command</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+            <span class="c1"># if command ends with a colon if is a statement with a</span>
+            <span class="c1"># continuation</span>
+            <span class="c1"># append the continuation to execute as one command</span>
+            <span class="n">parenthesis</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">parenthesis</span><span class="o">.</span><span class="n">command_ready</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="p">)):</span>
+                <span class="k">with</span> <span class="n">CatchStdout</span><span class="p">()</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">:</span>
+                    <span class="n">command</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+
+                <span class="n">value</span> <span class="o">=</span> <span class="n">stdout</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;actual&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="c1"># remove quotes from documented ``str`` output</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">):</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;expected&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="run_assertion"><a class="viewcode-back" href="../readmetester.html#readmetester.run_assertion">[docs]</a><span class="k">def</span> <span class="nf">run_assertion</span><span class="p">(</span><span class="n">holder</span><span class="p">:</span> <span class="n">Holder</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">code_block</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Test actual value against expected value.</span>
+
+<span class="sd">    :param holder:                  Object containing expected, actual,</span>
+<span class="sd">                                    and total values.</span>
+<span class="sd">    :param position:                Index of expected and actual lists.</span>
+<span class="sd">    :param code_block:              code-block x of all code-blocks.</span>
+<span class="sd">    :raises OutputDocumentError:    If assertion fails.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">actual</span> <span class="o">=</span> <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;actual&quot;</span><span class="p">][</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;expected&quot;</span><span class="p">][</span><span class="n">position</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">actual</span> <span class="o">==</span> <span class="n">expected</span>
+
+    <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">CROSS</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">OutputDocumentError</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2"> != </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code_block</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">actual</span><span class="p">)</span>
+        <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../readmetester.html#readmetester.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Parse README from commandline argument and initialize ``Holder``</span>
+<span class="sd">    to contain expected, actual, and total values. Enumerate over parsed</span>
+<span class="sd">    ``Readme``. Populate the three containers. Expected ``list`` from</span>
+<span class="sd">    the README file directly, actual from the actual command output and</span>
+<span class="sd">    total with a combination of both plus code-block headings. Run</span>
+<span class="sd">    assertions on the actual and expected commands. Print output from</span>
+<span class="sd">    the total ``list``. Clear and initialize base key-values on each</span>
+<span class="sd">    iteration. If no errors are raised then print that the README is a</span>
+<span class="sd">    success and there are no errors in testing.</span>
+
+<span class="sd">    :raises OutputDocumentError:    Raise if the expected ``list``</span>
+<span class="sd">                                    contains nothing even though command</span>
+<span class="sd">                                    output was captured.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">holder</span> <span class="o">=</span> <span class="n">Holder</span><span class="p">()</span>
+    <span class="n">readme</span> <span class="o">=</span> <span class="n">Readme</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">readme</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">readme</span><span class="p">):</span>
+            <span class="n">code_block</span> <span class="o">=</span> <span class="s2">&quot;code-block </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append_header</span><span class="p">(</span><span class="n">code_block</span><span class="p">)</span>
+            <span class="n">process</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">holder</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;expected&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;actual&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="n">OutputDocumentError</span><span class="p">(</span>
+                    <span class="s2">&quot;command returned output but no output is expected&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">position</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">holder</span><span class="p">[</span><span class="s2">&quot;actual&quot;</span><span class="p">]):</span>
+                <span class="n">run_assertion</span><span class="p">(</span><span class="n">holder</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">code_block</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">holder</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+            <span class="n">holder</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">80</span> <span class="o">*</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">.</span><span class="n">green</span><span class="o">.</span><span class="n">bold</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Success!&quot;</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File contains no code-blocks&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readmetester.html">readmetester</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">README</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">readmetester 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">readmetester</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Stephen Whitlock.
+    </div>
+  </body>
+</html>
