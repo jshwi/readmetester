@@ -6,10 +6,10 @@ name = "pypi"
 [dev-packages]
 ipython = "==7.19.0"
 prompt-toolkit = "==3.0.13"
-pyaud = "==1.2.1"
+pyaud = "==1.2.2"
 pytest = "==6.2.1"
-readmetester = {editable = true, path = "."}
 restview = "==2.9.2"
+readmetester = {editable = true, path = "."}
 twine = "==3.3.0"
 
 [packages]
