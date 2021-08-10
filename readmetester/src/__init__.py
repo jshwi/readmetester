@@ -48,7 +48,7 @@ class Seq(collections.MutableSequence):
         self._list: List[Any] = list()
 
     def __repr__(self) -> str:
-        return "<{} {}>".format(self.__class__.__name__, self._list)
+        return f"<{self.__class__.__name__} {self._list}>"
 
     def __str__(self) -> str:
         return str(self._list)
@@ -75,8 +75,9 @@ class Seq(collections.MutableSequence):
 
 
 class Readme(Seq):  # pylint: disable=too-few-public-methods
-    """Behaves like``list`` object. Read and hold ines from README
-    file.
+    """Behaves like``list`` object.
+
+    Read and hold ines from README file.
     """
 
     def __init__(self, filepath: Union[bytes, str, os.PathLike]) -> None:
@@ -153,14 +154,14 @@ class Total(Actual):
         value = highlight(
             value, PythonLexer(), Terminal256Formatter(style="monokai")
         )
-        self.append(". " + value.strip())
+        self.append(f". {value.strip()}")
 
     def extend(self, values: Any) -> None:
         """Append value prefixed with a check symbol.
 
         :param values: ``str`` to append with check symbol.
         """
-        super().append("\n".join(["{} {}".format(CHECK, i) for i in values]))
+        super().append("\n".join([f"{CHECK} {i}" for i in values]))
 
 
 class Expected(Actual):
@@ -202,7 +203,7 @@ class Mapping(collections.MutableMapping):
         self._dict: Dict[Any, Any] = dict()
 
     def __repr__(self) -> str:
-        return "<{} {}>".format(self.__class__.__name__, self._dict)
+        return f"<{self.__class__.__name__} {self._dict}>"
 
     def __str__(self) -> str:
         return str(self._dict)
@@ -274,8 +275,7 @@ class Parenthesis(Seq):
             self.pop()
 
     def command_ready(self, cmd: str) -> bool:
-        """Boolean value for whether command is ready to execute or
-        not.
+        """Boolean value for whether command is ready to execute or not.
 
         :param cmd: Python code.
         """
@@ -289,8 +289,7 @@ class Command(Seq):
         return "".join(self)
 
     def append(self, value: str) -> None:
-        """Append line from statement minus the ``>>> `` and
-        ``... ``.
+        """Append line from statement minus the ``>>> `` and ``... ``.
 
         :param value: Line of Python code.
         """

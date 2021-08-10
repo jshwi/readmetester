@@ -12,10 +12,10 @@ def prepend_lines(prepend, iterable):
     :param iterable:    Iterable to prepend with ``str``.
     :return:            Constructed ``str``.
     """
-    return "\n".join(["{} {}".format(prepend, i) for i in iterable])
+    return "\n".join([f"{prepend} {i}" for i in iterable])
 
 
-SUCCESS = "\n{}\nSuccess!".format(80 * "-")
+SUCCESS = f"\n{80 * '-'}\nSuccess!"
 CHECK = "\u2713"
 SIMPLE = """
 .. code-block:: python

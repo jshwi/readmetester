@@ -6,6 +6,7 @@ name = "pypi"
 [dev-packages]
 ipython = "==7.19.0"
 prompt-toolkit = "==3.0.13"
+pyaud = "==3.1.0"
 pytest = "==6.2.1"
 readmetester = {editable = true, path = "."}
 restview = "==2.9.2"

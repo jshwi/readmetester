@@ -7,7 +7,7 @@ import re
 
 
 class NoColorCapsys:
-    """Capsys but with a regex to remove ANSI escape codes
+    """Capsys but with a regex to remove ANSI escape codes.
 
     Class is preferable for this as we can instantiate the instance
     as a fixture that also contains the same attributes as capsys
@@ -25,7 +25,7 @@ class NoColorCapsys:
     @staticmethod
     def regex(out):
         """Replace ANSI color codes with empty strings i.e. remove all
-        escape codes
+        escape codes.
 
         Prefer to test colored output this way as colored strings can
         be tricky and the effort in testing their validity really isn't
@@ -40,7 +40,7 @@ class NoColorCapsys:
 
     def readouterr(self):
         """Call as capsys ``readouterr`` but regex the strings for
-        escape codes at the same time
+        escape codes at the same time.
 
         :return:    A tuple (just like the capsys) containing stdout in
                     the first index and stderr in the second
@@ -55,7 +55,7 @@ class NoColorCapsys:
 
     def stdout(self):
         """Call this to return the stdout without referencing the tuple
-        indices
+        indices.
 
         :return: Stdout.
         """
@@ -64,7 +64,7 @@ class NoColorCapsys:
 
 class EnterDir:
     """Change to the selected directory entered as an argument and when
-    actions are complete return to the previous directory
+    actions are complete return to the previous directory.
 
     :param new_path: Enter the directory to temporarily change to
     """

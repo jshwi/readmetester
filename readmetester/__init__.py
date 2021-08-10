@@ -86,7 +86,7 @@ def run_assertion(holder: Holder, position: int, code_block: str) -> None:
     except AssertionError as err:
         print(CROSS)
         raise OutputDocumentError(
-            "{}: {} != {}".format(code_block, expected, actual)
+            f"{code_block}: {expected} != {actual}"
         ) from err
 
 
@@ -110,7 +110,7 @@ def main() -> None:
     readme = Readme(parser.args.file)
     if readme:
         for count, element in enumerate(readme):
-            code_block = "code-block {}".format(count + 1)
+            code_block = f"code-block {count + 1}"
             holder["total"].append_header(code_block)
             process(element, holder)
             if not holder["expected"] and holder["actual"]:
@@ -126,6 +126,6 @@ def main() -> None:
 
             holder.clear()
 
-        print("\n{}\n{}".format(80 * "-", color.green.bold.get("Success!")))
+        print(f"\n{80 * '-'}\n{color.green.bold.get('Success!')}")
     else:
         print("File contains no code-blocks")

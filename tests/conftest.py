@@ -29,8 +29,8 @@ def fixture_patch_argv(monkeypatch):
 
 @pytest.fixture(name="main")
 def fixture_main(patch_argv):
-    """Function for passing mock ``readmetester.main`` commandline arguments
-    to package's main function.
+    """Function for passing mock ``readmetester.main`` commandline
+    arguments to package's main function.
 
     :param patch_argv:  Set args with ``sys.argv``
     :return:            Function for using this fixture.
@@ -64,7 +64,7 @@ def fixture_make_readme(tmpdir):
 
 @pytest.fixture(name="nocolorcapsys")
 def fixture_nocolorcapsys(capsys):
-    """Instantiate capsys with the regex method
+    """Instantiate capsys with the regex method.
 
     :param capsys: ``pytest`` fixture for capturing output stream.
     :return:        Instantiated ``NoColorCapsys`` object for capturing
