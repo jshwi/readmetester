@@ -32,7 +32,7 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=["tests"]),
     include_package_data=True,
     zip_safe=False,
-    install_requires=["object-colors==2.0.0", "pygments ==2.8.1"],
+    install_requires=["object-colors>=2.0.0", "pygments ==2.8.1"],
     entry_points={"console_scripts": ["readmetester=readmetester:main"]},
     python_requires=">=3.8",
 )
