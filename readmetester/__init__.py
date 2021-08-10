@@ -17,7 +17,7 @@ from .src import (
     parenthesis,
 )
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 os.environ["PYCHARM_HOSTED"] = "True"
 

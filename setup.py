@@ -11,7 +11,7 @@ with open("README.rst") as file:
 
 setuptools.setup(
     name="readmetester",
-    version="1.0.0",
+    version="1.0.1",
     description="Parse, test, and assert RST code-blocks",
     long_description=README,
     long_description_content_type="text/x-rst",
