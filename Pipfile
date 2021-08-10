@@ -12,6 +12,7 @@ pytest = "==6.2.1"
 readmetester = {editable = true, path = "."}
 restview = "==2.9.2"
 twine = "==3.3.0"
+urllib3 = ">=1.26.5"
 
 [packages]
 object-colors = ">=2.0.0"
