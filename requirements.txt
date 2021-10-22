@@ -45,7 +45,7 @@ pickleshare==0.7.5
 pipfile-requirements==0.3.0
 pkginfo==1.7.1
 pluggy==0.13.1
-prompt-toolkit==3.0.13
+prompt-toolkit==3.0.21
 ptyprocess==0.7.0
 py==1.10.0
 pyaud==3.1.0
