@@ -45,7 +45,7 @@ class Seq(collections.MutableSequence):
     """Replicate subclassing of ``list`` objects."""
 
     def __init__(self) -> None:
-        self._list: List[Any] = list()
+        self._list: List[Any] = []
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} {self._list}>"
@@ -82,7 +82,7 @@ class Readme(Seq):  # pylint: disable=too-few-public-methods
 
     def __init__(self, filepath: Union[bytes, str, os.PathLike]) -> None:
         super().__init__()
-        with open(filepath) as fin:
+        with open(filepath, encoding="utf-8") as fin:
             self.extend(
                 self._partition_blocks(
                     iter(
@@ -200,7 +200,7 @@ class Mapping(collections.MutableMapping):
     """Inherit to replicate subclassing of ``dict`` objects."""
 
     def __init__(self) -> None:
-        self._dict: Dict[Any, Any] = dict()
+        self._dict: Dict[Any, Any] = {}
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} {self._dict}>"
