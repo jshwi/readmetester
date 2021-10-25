@@ -289,7 +289,8 @@ class Command(Seq):
         return "".join(self)
 
     def append(self, value: str) -> None:
-        """Append line from statement minus the ``>>> `` and ``... ``.
+        """Append line from statement minus the ``">>> "`` and ``"...
+        "``.
 
         :param value: Line of Python code.
         """
