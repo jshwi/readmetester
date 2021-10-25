@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "438a8fbd245a17ec40ad3c4cc7ab9039fc43599f148fc3477a58f1252409456d"
+            "sha256": "b14568fc8eb64ae28293be32ce99da59c93e6080308310fe13496a45b179fd2d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -358,7 +358,7 @@
                 "sha256:9c2ea1e62d871267b78307fe511c0838ba0da28698c5732d54e2790bf3ba9899",
                 "sha256:e17d6e2b81095c9db0a03a8025a957f334d6ea30b26f9ec70805411e5c7c81f2"
             ],
-            "markers": "python_version < '4.0' and python_full_version >= '3.6.1'",
+            "markers": "python_version < '4' and python_full_version >= '3.6.1'",
             "version": "==5.9.3"
         },
         "jedi": {
@@ -648,11 +648,11 @@
         },
         "pyaud": {
             "hashes": [
-                "sha256:c61ec79c78baeb0c7612c7fb1f66cb972ec83f89a1b68fb43fe0e3d874a84306",
-                "sha256:f5e9e68ffb0b3b6e09ea373d2f7fe41904b61d1a162360ad4f6e5b0def66313e"
+                "sha256:42c5d4fd8a1346243f111140217a97d0acba9c1072646bdea56eadff02e0ded0",
+                "sha256:50b41a3847b39a7724964fd121aef70ada755f3052c497cc39d8da4d33667204"
             ],
             "index": "pypi",
-            "version": "==3.2.7"
+            "version": "==3.2.8"
         },
         "pycparser": {
             "hashes": [
@@ -726,7 +726,12 @@
         },
         "readmetester": {
             "editable": true,
-            "path": "."
+            "hashes": [
+                "sha256:10a0f043571f0c206ba45836ac3171696620911a1cc5bd2a996d988daad4c0e9",
+                "sha256:7971628d224bfecb1766e5e20a6f69a8a044ff1b5a3d7f11ee9481904d400296"
+            ],
+            "path": ".",
+            "version": "==1.0.1"
         },
         "regex": {
             "hashes": [
@@ -798,6 +803,10 @@
                 "sha256:a86d6e1f5b1dc238b218b012df0aa79409667bb209e58da56d0b94704e712a97"
             ],
             "version": "==1.5.0"
+        },
+        "sanitized-package": {
+            "editable": true,
+            "path": "."
         },
         "secretstorage": {
             "hashes": [
