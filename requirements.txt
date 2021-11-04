@@ -26,7 +26,7 @@ imagesize==1.2.0
 importlib-metadata==4.8.1
 iniconfig==1.1.1
 ipython==7.29.0
-isort==5.9.3
+isort==5.10.0
 jedi==0.18.0
 jeepney==0.7.1
 jinja2==3.0.2
@@ -60,7 +60,7 @@ pytest==6.2.5
 python-dotenv==0.19.1
 pytz==2021.3
 readme-renderer==30.0
-regex==2021.10.23
+regex==2021.11.2
 requests-toolbelt==0.9.1
 requests==2.26.0
 restview==2.9.2
@@ -81,7 +81,7 @@ toml==0.10.2
 tomli==1.2.2
 tqdm==4.62.3
 traitlets==5.1.1
-twine==3.3.0
+twine==3.5.0
 typing-extensions==3.10.0.2
 untokenize==0.1.1
 urllib3==1.26.7
