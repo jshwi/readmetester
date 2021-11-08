@@ -7,7 +7,7 @@ name = "pypi"
 bump2version = "==1.0.1"
 ipython = "==7.29.0"
 prompt-toolkit = "==3.0.22"
-pyaud = "==3.2.8"
+pyaud = "==3.2.9"
 pytest = "==6.2.5"
 readmetester = {editable = true, path = "."}
 restview = "==2.9.2"
