@@ -6,7 +6,7 @@ name = "pypi"
 [dev-packages]
 bump2version = "==1.0.1"
 ipython = "==7.29.0"
-prompt-toolkit = "==3.0.22"
+prompt-toolkit = "==3.0.23"
 pyaud = "==3.2.10"
 pytest = "==6.2.5"
 readmetester = {editable = true, path = "."}
