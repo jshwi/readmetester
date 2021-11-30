@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b011b9d63889251239a41e3d12c37fefe1e32455028ef580c9c3aa633d19c218"
+            "sha256": "b569368483311d54dc5eaef55975b384da55b3123c0dcb6aab531dbb26bb8c70"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -216,7 +216,7 @@
         },
         "coverage": {
             "extras": [
-                "toml"
+
             ],
             "hashes": [
                 "sha256:01774a2c2c729619760320270e42cd9e797427ecfddd32c2a7b639cdc481f3c0",
@@ -371,7 +371,7 @@
                 "sha256:6f62d78e2f89b4500b080fe3a81690850cd254227f27f75c3a0c491a1f351ba7",
                 "sha256:e8443a5e7a020e9d7f97f1d7d9cd17c88bcb3bc7e218bf9cf5095fe550be2951"
             ],
-            "markers": "python_version < '4' and python_full_version >= '3.6.1'",
+            "markers": "python_version < '4.0' and python_full_version >= '3.6.1'",
             "version": "==5.10.1"
         },
         "jedi": {
@@ -739,7 +739,12 @@
         },
         "readmetester": {
             "editable": true,
-            "path": "."
+            "hashes": [
+                "sha256:10a0f043571f0c206ba45836ac3171696620911a1cc5bd2a996d988daad4c0e9",
+                "sha256:7971628d224bfecb1766e5e20a6f69a8a044ff1b5a3d7f11ee9481904d400296"
+            ],
+            "path": ".",
+            "version": "==1.0.1"
         },
         "regex": {
             "hashes": [
@@ -837,11 +842,11 @@
         },
         "restview": {
             "hashes": [
-                "sha256:47929bae12e7cf39cbb93a5a5a16f970941e39301c05cbb4ea398df8c113b1e2",
-                "sha256:790097eb587c0465126dde73ca06c7a22c5007ce1be4a1de449a13c0767b32dc"
+                "sha256:5951aa2182e7a9aa3ab906dbd0f0d33df8fe93e66318a8689649c1228ad74cd8",
+                "sha256:ce5a56e81ccb6e2197d735501981cb9a6ffc79b63296b7db719e8c9eb9b09769"
             ],
             "index": "pypi",
-            "version": "==2.9.2"
+            "version": "==2.9.3"
         },
         "rfc3986": {
             "hashes": [
@@ -850,6 +855,10 @@
             ],
             "version": "==1.5.0"
         },
+        "sanitized-package": {
+            "editable": true,
+            "path": "."
+        },
         "secretstorage": {
             "hashes": [
                 "sha256:422d82c36172d88d6a0ed5afdec956514b189ddbfb72fefab0c8a1cee4eaf71f",
@@ -857,6 +866,14 @@
             ],
             "markers": "sys_platform == 'linux'",
             "version": "==3.3.1"
+        },
+        "setuptools": {
+            "hashes": [
+                "sha256:b4c634615a0cf5b02cf83c7bedffc8da0ca439f00e79452699454da6fbd4153d",
+                "sha256:feb5ff19b354cde9efd2344ef6d5e79880ce4be643037641b49508bbb850d060"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==59.4.0"
         },
         "six": {
             "hashes": [
@@ -988,7 +1005,7 @@
                 "sha256:2cdf80e4e04866a9b3689a51869016d36db0814d84b8d8a568d22781d45d27ed",
                 "sha256:829704698b22e13ec9eaf959122315eabb370b0884400e9818334d8b677023d9"
             ],
-            "markers": "python_version < '3.10'",
+            "markers": "python_version >= '3.6'",
             "version": "==4.0.0"
         },
         "untokenize": {
