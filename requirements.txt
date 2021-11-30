@@ -63,7 +63,7 @@ readme-renderer==30.0
 regex==2021.11.10
 requests-toolbelt==0.9.1
 requests==2.26.0
-restview==2.9.2
+restview==2.9.3
 rfc3986==1.5.0
 secretstorage==3.3.1
 six==1.16.0
