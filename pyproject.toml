@@ -1,5 +1,8 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
 [tool.black]
-line-length = 79
 exclude = '''
 /(
   | \.git
@@ -9,9 +12,34 @@ exclude = '''
   | dist
 )/
 '''
+line-length = 79
 
 [tool.coverage.run]
 omit = ["whitelist.py", "readmetester/__main__.py"]
+
+[tool.poetry]
+authors = ["jshwi <stephen@jshwisolutions.com>"]
+description = "Parse, test, and assert RST code-blocks"
+license = "MIT"
+name = "readmetester"
+version = "1.0.1"
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+Pygments = "^2.11.2"
+object-colors = "^2.0.1"
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+bump2version = "^1.0.1"
+ipython = "^7.31.0"
+pyaud = "^3.6.0"
+pytest = "^6.2.5"
+restview = "^2.9.3"
+toml-sort = "^0.19.0"
+
+[tool.poetry.scripts]
+readmetester = "readmetester.__main__:main"
 
 [tool.pytest.ini_options]
 addopts = [
@@ -21,5 +49,5 @@ addopts = [
      "--cov-report",
      "term-missing"
 ]
-norecursedirs = ["docs", "*.egg-info", ".git", ".mypy_cache", ".idea", "prof"]
 filterwarnings = "ignore::DeprecationWarning"
+norecursedirs = ["docs", "*.egg-info", ".git", ".mypy_cache", ".idea", "prof"]
