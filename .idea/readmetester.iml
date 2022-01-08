@@ -12,7 +12,7 @@
       <excludeFolder url="file://$MODULE_DIR$/readmetester.egg-info" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/sonarlint" />
     </content>
-    <orderEntry type="jdk" jdkName="Pipenv (readmetester)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.8 (venv)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">

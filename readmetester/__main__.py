@@ -2,7 +2,7 @@
 readmetester.__main__
 =====================
 """
-import readmetester
+from ._main import main
 
 if __name__ == "__main__":
-    readmetester.main()
+    main()

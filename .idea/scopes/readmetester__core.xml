@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="readmetester._core" pattern="file:readmetester/_core.py" />
+</component>

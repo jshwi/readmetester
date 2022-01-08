@@ -60,7 +60,7 @@ OBJECT = """
     ...     pass
     >>> o = Object()
     >>> print(o)
-    <readmetester.src.Object object at 0x7f4f52cf12e0>
+    <readmetester._core.Object object at 0x7f4f52cf12e0>
 ..
 """
 HANGING_TUPLE = """
@@ -198,7 +198,7 @@ TEMPLATES = [
             ". >>> o = Object()\n"
             ". >>> print(o)\n"
             + CHECK
-            + " <readmetester.src.Object at >\n"
+            + " <readmetester._core.Object at >\n"
             + SUCCESS
         ),
     ),

@@ -5,7 +5,7 @@ readmetester
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: readmetester.src
+.. automodule:: readmetester.exceptions
    :members:
    :undoc-members:
    :show-inheritance:

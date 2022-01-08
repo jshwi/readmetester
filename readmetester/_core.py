@@ -1,6 +1,6 @@
 """
-readmetester.src
-================
+readmetester._core
+==================
 """
 from __future__ import annotations
 
