@@ -1,6 +1,6 @@
 """
-readmetester.src
-================
+readmetester._core
+==================
 """
 # pylint: disable=consider-using-f-string
 from __future__ import annotations

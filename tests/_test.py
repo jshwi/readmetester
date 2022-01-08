@@ -2,7 +2,7 @@
 tests._test
 ===========
 """
-
+# pylint: disable=protected-access
 import pytest
 
 import readmetester
@@ -58,7 +58,7 @@ def test_output_document_error(main, make_readme, template, expected):
     :param expected:        Expected output.
     """
     readme = make_readme(template)
-    with pytest.raises(readmetester.OutputDocumentError) as err:
+    with pytest.raises(readmetester.exceptions.OutputDocumentError) as err:
         main(readme)
 
     assert str(err.value) == expected
@@ -78,7 +78,7 @@ def test_fallback_readme(tmpdir, make_readme, patch_argv):
     patch_argv()
     readme = make_readme("")
     with EnterDir(tmpdir):
-        parser = readmetester.ArgumentParser()
+        parser = readmetester._main.ArgumentParser()
 
     assert parser.args.file == readme
 
@@ -103,7 +103,8 @@ def test_no_code_block_found(make_readme, main, capsys):
 
 def test_seq():
     """Get coverage on ``Seq`` abstract methods."""
-    seq = readmetester.Seq()
+    # noinspection PyUnresolvedReferences
+    seq = readmetester._core.Seq()
     seq.append("key")
     assert seq[0] == "key"
     seq[0] = "value"
@@ -118,7 +119,8 @@ def test_seq():
 
 def test_mapping():
     """Get coverage on ``Mapping`` abstract methods."""
-    mapping = readmetester.Mapping()
+    # noinspection PyUnresolvedReferences
+    mapping = readmetester._core.Mapping()
     mapping_repr = repr(mapping)
     assert mapping_repr == "<Mapping {}>"
     mapping_str = str(mapping)
