@@ -14,6 +14,8 @@ from typing import Any, Dict, Iterator, List, Union
 import object_colors
 from pygments import highlight
 from pygments.formatters.terminal256 import Terminal256Formatter
+
+# noinspection PyUnresolvedReferences
 from pygments.lexers.python import PythonLexer
 
 color = object_colors.Color()

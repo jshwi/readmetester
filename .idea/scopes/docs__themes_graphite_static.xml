@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="docs._themes.graphite.static" pattern="file[readmetester]:docs/_themes/graphite/static/*" />
+</component>
