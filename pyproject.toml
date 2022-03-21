@@ -33,7 +33,7 @@ python = "^3.8"
 [tool.poetry.dev-dependencies]
 bump2version = "^1.0.1"
 ipython = "^8.1.1"
-pyaud = "^3.6.0"
+pyaud = "^3.9.0"
 pytest = "^6.2.5"
 restview = "^3.0.0"
 toml-sort = "^0.19.0"
