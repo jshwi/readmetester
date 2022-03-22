@@ -49,7 +49,7 @@ def process(lines: str, holder: Holder) -> None:
                 if value is not None:
                     holder["actual"].extend(value)
                     holder["total"].extend(value)
-        else:
+        elif line != ">>>":
 
             # remove quotes from documented ``str`` output
             if line.startswith("'") and line.endswith("'"):

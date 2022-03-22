@@ -15,6 +15,7 @@ from . import EnterDir, strings
     strings.TEMPLATES,
     ids=[
         "simple",
+        "simple-line-break",
         "multiple",
         "object",
         "hanging-tuple",

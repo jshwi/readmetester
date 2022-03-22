@@ -24,6 +24,16 @@ SIMPLE = """
     'Hello, world!'
 ..
 """
+SIMPLE_LINE_BREAK = """
+.. code-block:: python
+
+    >>> print("Hello, world!")
+    >>>
+    >>> print("Hello, world!")
+    'Hello, world!'
+    'Hello, world!'
+..
+"""
 MULTILINE = """
 .. code-block:: python
 
@@ -141,6 +151,12 @@ TEMPLATES = [
     (
         SIMPLE,
         'code-block 1\n. >>> print("Hello, world!")\n{} Hello, world!\n{}'.format(
+            CHECK, SUCCESS
+        ),
+    ),
+    (
+        SIMPLE_LINE_BREAK,
+        'code-block 1\n. >>> print("Hello, world!")\n{0} Hello, world!\n. >>> print("Hello, world!")\n{0} Hello, world!\n{1}'.format(
             CHECK, SUCCESS
         ),
     ),
