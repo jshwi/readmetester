@@ -157,6 +157,8 @@ NESTED_HANGING = """
     tuple
 ..
 """
+with open("README.rst") as fin:
+    THIS_README = fin.read()
 TEMPLATES = [
     (
         SIMPLE,
@@ -343,6 +345,27 @@ TEMPLATES = [
             + "\n"
             + SUCCESS
         ),
+    ),
+    (
+        THIS_README,
+        (
+            "code-block 1\n"
+            '. >>> print("Hello, world!")\n'
+            "{0} Hello, world!\n"
+            "\n"
+            "code-block 2\n"
+            ". >>> n = [\n"
+            '. ...     "zero",\n'
+            '. ...     "one",\n'
+            '. ...     "two",\n'
+            ". ... ]\n"
+            ". >>> for c, i in enumerate(n):\n"
+            ". ...     print(c, i)\n"
+            "{0} 0 zero\n"
+            "{0} 1 one\n"
+            "{0} 2 two\n"
+            "{1}"
+        ).format(CHECK, SUCCESS),
     ),
 ]
 ERR_NO_OUTPUT_EXPECTED = """

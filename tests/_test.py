@@ -23,6 +23,7 @@ from . import EnterDir, strings
         "hanging-list",
         "hanging-dict",
         "nested-hanging",
+        "this-readme",
     ],
 )
 def test_returns(nocolorcapsys, main, make_readme, template, expected):
