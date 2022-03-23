@@ -29,8 +29,8 @@ class NoColorCapsys:
 
         Prefer to test colored output this way as colored strings can
         be tricky and the effort in testing their validity really isn't
-        worth it. Also hard to read expected strings when they contain
-        the codes.
+        worth it (also hard to read expected strings when they contain
+        the codes).
 
         :param out: String to strip of ANSI escape codes
         :return:    Same string but without ANSI codes
