@@ -38,14 +38,13 @@ def test_returns(
 ) -> None:
     """Test standard README and return values.
 
-    :param nocolorcapsys:   ``capsys`` without ANSI color codes.
-    :param main:            Mock the main function for the package.
-                            Provide test arguments to ``sys.argv`` as
-                            function parameters.
-    :param make_readme:     Create a README.rst file in the temp dir
-                            containing the provided ``str``.
-    :param template:        ``str`` to write to the test README.
-    :param expected:        Expected stdout.
+    :param nocolorcapsys: ``capsys`` without ANSI color codes.
+    :param main: Mock the main function for the package. Provide test
+        arguments to ``sys.argv`` as function parameters.
+    :param make_readme: Create a README.rst file in the temp dir
+        containing the provided ``str``.
+    :param template: ``str`` to write to the test README.
+    :param expected: Expected stdout.
     """
     readme = make_readme(template)
     main(str(readme))
@@ -63,13 +62,12 @@ def test_output_document_error(
 ) -> None:
     """Test error when no output documentation provided.
 
-    :param main:            Mock the main function for the package.
-                            Provide test arguments to ``sys.argv`` as
-                            function parameters.
-    :param make_readme:     Create a README.rst file in the temp dir
-                            containing the provided ``str``.
-    :param template:        ``str`` to write to the test README.
-    :param expected:        Expected output.
+    :param main: Mock the main function for the package. Provide test
+        arguments to ``sys.argv`` as function parameters.
+    :param make_readme: Create a README.rst file in the temp dir
+        containing the provided ``str``.
+    :param template: ``str`` to write to the test README.
+    :param expected: Expected output.
     """
     readme = make_readme(template)
     with pytest.raises(readmetester.exceptions.OutputDocumentError) as err:
@@ -81,15 +79,17 @@ def test_output_document_error(
 def test_fallback_readme(
     tmp_path: Path, make_readme: t.Any, patch_argv: t.Any
 ) -> None:
-    """Test fallback README.rst is used if no args are provided and a
-    README.rst file is present in the current working dir.
+    """Test fallback README.rst.
 
-    :param tmp_path:    Fixture for creating and returning temporary
-                        directory.
+    Test README is used if no args are provided and a README.rst file is
+    present in the current working dir.
+
+    :param tmp_path: Fixture for creating and returning temporary
+        directory.
     :param make_readme: Create a README.rst file in the temp dir
-                        containing the provided ``str``.
+        containing the provided ``str``.
     :param patch_argv:  Set args with ``sys.argv``. Clears pytest
-                        arguments for this test.
+        arguments for this test.
     """
     patch_argv()
     readme = make_readme("")
@@ -102,16 +102,13 @@ def test_fallback_readme(
 def test_no_code_block_found(
     make_readme: t.Any, main: t.Any, capsys: pytest.CaptureFixture
 ) -> None:
-    """Test appropriate stdout is produced when no code-block has been
-    parsed from file.
+    """Test message is produced when no code-block exists in file.
 
     :param make_readme: Create a README.rst file in the temp dir
-                        containing the provided ``str``. Empty README
-                        in this case.
-    :param main:        Mock the main function for the package. Provide
-                        test arguments to ``sys.argv`` as function
-                        parameters.
-    :param capsys:      ``pytest`` fixture for capturing output stream.
+        containing the provided ``str``. Empty README in this case.
+    :param main: Mock the main function for the package. Provide test
+        arguments to ``sys.argv`` as function parameters.
+    :param capsys: ``pytest`` fixture for capturing output stream.
     """
     readme = make_readme("")
     main(str(readme))
@@ -153,12 +150,12 @@ def test_no_pyproject_toml(
     No need to run assertion. Test passes if ``FileNotFoundError`` not
     raised.
 
-    :param tmp_path:    Fixture for creating and returning temporary
-                        directory.
+    :param tmp_path: Fixture for creating and returning temporary
+        directory.
     :param make_readme: Create a README.rst file in the temp dir
-                        containing the provided ``str``.
-    :param patch_argv:  Set args with ``sys.argv``. Clears pytest
-                        arguments for this test.
+        containing the provided ``str``.
+    :param patch_argv: Set args with ``sys.argv``. Clears pytest
+        arguments for this test.
     """
     patch_argv()
     readme = make_readme(strings.Simple().template)

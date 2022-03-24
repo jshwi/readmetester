@@ -14,8 +14,10 @@ from ._core import parenthesis as _parenthesis
 
 
 def process(lines: str, holder: _Holder) -> None:
-    """Populate items to their allocated ``list`` object. First split
-    data by documented commands and documented command output.
+    """Populate items to their allocated ``list`` object.
+
+    First split data by documented commands and documented command
+    output.
 
         * Within the command section collect the header with ``total``
           and collect the  results from executed commands with ``total``
@@ -24,18 +26,18 @@ def process(lines: str, holder: _Holder) -> None:
         * Collect all non-command documentation as command output as
           this process is guaranteed to only run within a code-block.
 
-    :param lines:   Lines from README file.
-    :param holder:  Holding object.
+    :param lines: Lines from README file.
+    :param holder: Holding object.
     """
     for line in lines:
 
-        # any lines beginning with ``>>> `` or ``... `` are
-        # considered commands
+        # any lines beginning with ``>>> `` or ``... `` are considered
+        # commands
         if any(line.startswith(i) for i in (">>> ", "... ")):
             holder["total"].append_command(line)
             _command.append(line)
 
-            # if command ends with a colon if is a statement with a
+            # if command ends with a colon it is a statement with a
             # continuation
             # append the continuation to execute as one command
             _parenthesis.eval(str(_command))
@@ -49,7 +51,7 @@ def process(lines: str, holder: _Holder) -> None:
                     holder["total"].extend(value)
         elif line != ">>>":
 
-            # remove quotes from documented ``str`` output
+            # remove quotes from documented `str` output
             if line.startswith("'") and line.endswith("'"):
                 line = line[1:-1:]
 
@@ -59,11 +61,10 @@ def process(lines: str, holder: _Holder) -> None:
 def run_assertion(holder: _Holder, position: int, code_block: str) -> None:
     """Test actual value against expected value.
 
-    :param holder:                  Object containing expected, actual,
-                                    and total values.
-    :param position:                Index of expected and actual lists.
-    :param code_block:              code-block x of all code-blocks.
-    :raises OutputDocumentError:    If assertion fails.
+    :param holder: Object containing expected, actual, and total values.
+    :param position: Index of expected and actual lists.
+    :param code_block: code-block x of all code-blocks.
+    :raises OutputDocumentError: If assertion fails.
     """
     actual = holder["actual"][position]
     expected = holder["expected"][position]
@@ -78,19 +79,26 @@ def run_assertion(holder: _Holder, position: int, code_block: str) -> None:
 
 
 def main() -> None:
-    """Parse README from commandline argument and initialize ``Holder``
-    to contain expected, actual, and total values. Enumerate over parsed
-    ``Readme``. Populate the three containers. Expected ``list`` from
-    the README file directly, actual from the actual command output and
-    total with a combination of both plus code-block headings. Run
-    assertions on the actual and expected commands. Print output from
-    the total ``list``. Clear and initialize base key-values on each
-    iteration. If no errors are raised then print that the README is a
-    success and there are no errors in testing.
+    """Parse README from commandline argument.
 
-    :raises OutputDocumentError:    Raise if the expected ``list``
-                                    contains nothing even though command
-                                    output was captured.
+    Initialize ``Holder`` to contain expected, actual, and total values.
+
+    Enumerate over parsed ``Readme`` and populate the three containers.
+
+        1. Expected ``list`` from the README file directly
+        2. Actual from the actual command output
+        3. Total with a combination of both plus code-block headings
+
+    Run assertions on the actual and expected commands and print output
+    from the total ``list``.
+
+    Clear and initialize base key-values on each iteration.
+
+    If no errors are raised then print that the README is a success and
+    there are no errors in testing.
+
+    :raises OutputDocumentError: Raise if the expected ``list`` contains
+        nothing even though command output was captured.
     """
     parser = _Parser()
     holder = _Holder()
