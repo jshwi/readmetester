@@ -2,20 +2,18 @@
 readmetester
 ============
 """
-from . import exceptions
-from ._core import (
-    CROSS,
-    ArgumentParser,
-    CatchStdout,
-    Holder,
-    Readme,
-    color,
-    command,
-    parenthesis,
-)
+from . import exceptions as _exceptions
+from ._core import CROSS as _CROSS
+from ._core import CatchStdout as _CatchStdout
+from ._core import Holder as _Holder
+from ._core import Parser as _Parser
+from ._core import Readme as _Readme
+from ._core import color as _color
+from ._core import command as _command
+from ._core import parenthesis as _parenthesis
 
 
-def process(lines: str, holder: Holder) -> None:
+def process(lines: str, holder: _Holder) -> None:
     """Populate items to their allocated ``list`` object. First split
     data by documented commands and documented command output.
 
@@ -35,15 +33,15 @@ def process(lines: str, holder: Holder) -> None:
         # considered commands
         if any(line.startswith(i) for i in (">>> ", "... ")):
             holder["total"].append_command(line)
-            command.append(line)
+            _command.append(line)
 
             # if command ends with a colon if is a statement with a
             # continuation
             # append the continuation to execute as one command
-            parenthesis.eval(str(command))
-            if parenthesis.command_ready(str(command)):
-                with CatchStdout() as stdout:
-                    command.exec()
+            _parenthesis.eval(str(_command))
+            if _parenthesis.command_ready(str(_command)):
+                with _CatchStdout() as stdout:
+                    _command.exec()
 
                 value = stdout.getvalue()
                 if value is not None:
@@ -58,7 +56,7 @@ def process(lines: str, holder: Holder) -> None:
             holder["expected"].append(line)
 
 
-def run_assertion(holder: Holder, position: int, code_block: str) -> None:
+def run_assertion(holder: _Holder, position: int, code_block: str) -> None:
     """Test actual value against expected value.
 
     :param holder:                  Object containing expected, actual,
@@ -73,8 +71,8 @@ def run_assertion(holder: Holder, position: int, code_block: str) -> None:
         assert actual == expected
 
     except AssertionError as err:
-        print(CROSS)
-        raise exceptions.OutputDocumentError(
+        print(_CROSS)
+        raise _exceptions.OutputDocumentError(
             f"{code_block}: {expected} != {actual}"
         ) from err
 
@@ -94,16 +92,16 @@ def main() -> None:
                                     contains nothing even though command
                                     output was captured.
     """
-    parser = ArgumentParser()
-    holder = Holder()
-    readme = Readme(parser.args.file)
+    parser = _Parser()
+    holder = _Holder()
+    readme = _Readme(parser.args.file)
     if readme:
         for count, element in enumerate(readme):
             code_block = f"code-block {count + 1}"
             holder["total"].append_header(code_block)
             process(element, holder)
             if not holder["expected"] and holder["actual"]:
-                raise exceptions.OutputDocumentError(
+                raise _exceptions.OutputDocumentError(
                     "command returned output but no output is expected"
                 )
 
@@ -115,6 +113,6 @@ def main() -> None:
 
             holder.clear()
 
-        print(f"\n{80 * '-'}\n{color.green.bold.get('Success!')}")
+        print(f"\n{80 * '-'}\n{_color.green.bold.get('Success!')}")
     else:
         print("File contains no code-blocks")

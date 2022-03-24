@@ -81,7 +81,7 @@ def test_fallback_readme(tmpdir, make_readme, patch_argv):
     patch_argv()
     readme = make_readme("")
     with EnterDir(tmpdir):
-        parser = readmetester._main.ArgumentParser()
+        parser = readmetester._main._Parser()
 
     assert parser.args.file == readme
 
