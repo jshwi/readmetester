@@ -24,6 +24,8 @@ from pygments.formatters.terminal256 import (
 from pygments.lexers.python import PythonLexer as _PythonLexer
 from pyproject_parser import PyProject as _PyProject
 
+from . import exceptions as _exceptions
+
 color = _Color()
 color.populate("fore")
 for foreground in color.colors:
@@ -331,3 +333,68 @@ class _Command(Seq):
 
 command = _Command()
 parenthesis = _Parenthesis()
+
+
+def process(lines: str, holder: Holder) -> None:
+    """Populate items to their allocated ``list`` object.
+
+    First split data by documented commands and documented command
+    output.
+
+        * Within the command section collect the header with ``total``
+          and collect the  results from executed commands with ``total``
+          and ``actual``.
+
+        * Collect all non-command documentation as command output as
+          this process is guaranteed to only run within a code-block.
+
+    :param lines: Lines from README file.
+    :param holder: Holding object.
+    """
+    for line in lines:
+
+        # any lines beginning with ``>>> `` or ``... `` are considered
+        # commands
+        if any(line.startswith(i) for i in (">>> ", "... ")):
+            holder["total"].append_command(line)
+            command.append(line)
+
+            # if command ends with a colon it is a statement with a
+            # continuation
+            # append the continuation to execute as one command
+            parenthesis.eval(str(command))
+            if parenthesis.command_ready(str(command)):
+                with CatchStdout() as stdout:
+                    command.exec()
+
+                value = stdout.getparts()
+                if value is not None:
+                    holder["actual"].extend(value)
+                    holder["total"].extend(value)
+        elif line != ">>>":
+
+            # remove quotes from documented `str` output
+            if line.startswith("'") and line.endswith("'"):
+                line = line[1:-1:]
+
+            holder["expected"].append(line)
+
+
+def run_assertion(holder: Holder, position: int, code_block: str) -> None:
+    """Test actual value against expected value.
+
+    :param holder: Object containing expected, actual, and total values.
+    :param position: Index of expected and actual lists.
+    :param code_block: code-block x of all code-blocks.
+    :raises OutputDocumentError: If assertion fails.
+    """
+    actual = holder["actual"][position]
+    expected = holder["expected"][position]
+    try:
+        assert actual == expected
+
+    except AssertionError as err:
+        print(CROSS)
+        raise _exceptions.OutputDocumentError(
+            f"{code_block}: {expected} != {actual}"
+        ) from err
