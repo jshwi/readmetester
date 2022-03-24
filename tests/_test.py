@@ -94,7 +94,7 @@ def test_fallback_readme(
     patch_argv()
     readme = make_readme("")
     with EnterDir(tmp_path):
-        parser = readmetester._main._Parser()
+        parser = readmetester._main._Parser(Path.cwd() / "README.rst")
 
     assert parser.file == readme
 

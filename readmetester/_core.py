@@ -39,15 +39,14 @@ _os.environ["PYCHARM_HOSTED"] = "True"
 
 
 class Parser(_ArgumentParser):
-    """Parse commandline arguments and hold the file path."""
+    """Parse commandline arguments and hold the file path.
 
-    def __init__(self) -> None:
-        readme = _Path.cwd() / "README.rst"
-        if len(_sys.argv) < 2 and readme.is_file():
-            _sys.argv.append(str(readme))
+    :param path: Path to README.rst file.
+    """
 
+    def __init__(self, path: _t.Union[str, _Path]) -> None:
         super().__init__()
-        self.add_argument("file", action="store")
+        self.add_argument("file", nargs="?", action="store", default=path)
         self._args = self.parse_args()
         self.file = _Path(self._args.file)
 

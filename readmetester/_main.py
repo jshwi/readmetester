@@ -2,6 +2,9 @@
 readmetester
 ============
 """
+import typing as _t
+from pathlib import Path as _Path
+
 from . import exceptions as _exceptions
 from ._core import Holder as _Holder
 from ._core import Parser as _Parser
@@ -11,7 +14,7 @@ from ._core import process as _process
 from ._core import run_assertion as _run_assertion
 
 
-def main() -> None:
+def main(path: _t.Union[str, _Path] = _Path.cwd() / "README.rst") -> None:
     """Parse README from commandline argument.
 
     Initialize ``Holder`` to contain expected, actual, and total values.
@@ -33,7 +36,7 @@ def main() -> None:
     :raises OutputDocumentError: Raise if the expected ``list`` contains
         nothing even though command output was captured.
     """
-    parser = _Parser()
+    parser = _Parser(path)
     holder = _Holder()
     readme = _Readme(parser.file)
     if readme:
