@@ -2,18 +2,19 @@
 readmetester._assert
 ====================
 """
-import sys
-from typing import Optional
-from warnings import warn
+import sys as _sys
+import typing as _t
+from warnings import warn as _warn
 
-import restructuredtext_lint
+import restructuredtext_lint as _restructuredtext_lint
 
-from . import exceptions
-from ._core import CROSS, Readme
+from . import exceptions as _exceptions
+from ._core import CROSS as _CROSS
+from ._core import Readme as _Readme
 
 
 def equality(
-    actual: Optional[str], expected: Optional[str], code_block: str
+    actual: _t.Optional[str], expected: _t.Optional[str], code_block: str
 ) -> None:
     """Test actual value against expected value.
 
@@ -27,14 +28,14 @@ def equality(
             assert actual == expected
 
         except AssertionError as err:
-            print(CROSS)
-            raise exceptions.OutputNotEqualError(
+            print(_CROSS)
+            raise _exceptions.OutputNotEqualError(
                 code_block, actual, expected
             ) from err
 
 
 def actual_expected(
-    actual: Optional[str], expected: Optional[str], code_block: str
+    actual: _t.Optional[str], expected: _t.Optional[str], code_block: str
 ) -> None:
     """Test equality of actual and expected results.
 
@@ -47,10 +48,10 @@ def actual_expected(
                                     and output was produced.
     """
     if actual is None and expected is not None:
-        raise exceptions.OutputExpectedError(code_block, expected)
+        raise _exceptions.OutputExpectedError(code_block, expected)
 
     if actual is not None and expected is None:
-        raise exceptions.OutputNotExpectedError(code_block, actual)
+        raise _exceptions.OutputNotExpectedError(code_block, actual)
 
 
 def syntax(path: str) -> None:
@@ -58,16 +59,16 @@ def syntax(path: str) -> None:
 
     :param path: Path to README.
     """
-    errors = restructuredtext_lint.lint_file(str(path))
+    errors = _restructuredtext_lint.lint_file(str(path))
     if errors:
-        raise exceptions.SyntaxDocumentError(errors[0].full_message)
+        raise _exceptions.SyntaxDocumentError(errors[0].full_message)
 
 
-def code_blocks(readme: Readme) -> None:
+def code_blocks(readme: _Readme) -> None:
     """If no code blocks in file, warn.
 
     :param readme. Instantiated ``Readme`` object.
     """
     if not readme:
-        warn("file contains no code-blocks", RuntimeWarning)
-        sys.exit(0)
+        _warn("file contains no code-blocks", RuntimeWarning)
+        _sys.exit(0)

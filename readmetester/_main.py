@@ -2,20 +2,18 @@
 readmetester
 ============
 """
-from itertools import zip_longest
+from itertools import zip_longest as _zip_longest
 
 from . import _assert
-from ._core import (
-    ArgumentParser,
-    CatchStdout,
-    Command,
-    Holder,
-    Parenthesis,
-    Readme,
-)
+from ._core import CatchStdout as _CatchStdout
+from ._core import Command as _Command
+from ._core import Holder as _Holder
+from ._core import Parenthesis as _Parenthesis
+from ._core import Parser as _Parser
+from ._core import Readme as _Readme
 
 
-def process(lines: str, holder: Holder) -> None:
+def _process(lines: str, holder: _Holder) -> None:
     """Populate items to their allocated ``list`` object. First split
     data by documented commands and documented command output.
 
@@ -29,8 +27,8 @@ def process(lines: str, holder: Holder) -> None:
     :param lines:   Lines from README file.
     :param holder:  Holding object.
     """
-    command = Command()
-    parenthesis = Parenthesis()
+    command = _Command()
+    parenthesis = _Parenthesis()
     for line in lines:
 
         # any lines beginning with ``>>> `` or ``... `` are
@@ -44,7 +42,7 @@ def process(lines: str, holder: Holder) -> None:
             # append the continuation to execute as one command
             parenthesis.eval(str(command))
             if parenthesis.command_ready(str(command)):
-                with CatchStdout() as stdout:
+                with _CatchStdout() as stdout:
                     command.exec()
 
                 value = stdout.getvalue()
@@ -74,17 +72,17 @@ def main() -> None:
                                     contains nothing even though command
                                     output was captured.
     """
-    parser = ArgumentParser()
-    holder = Holder()
+    parser = _Parser()
+    holder = _Holder()
     _assert.syntax(parser.args.file)
-    readme = Readme(parser.args.file)
+    readme = _Readme(parser.args.file)
     _assert.code_blocks(readme)
     for count, element in enumerate(readme):
         code_block = f"code-block {count + 1}"
         holder.total.append_header(code_block)
-        process(element, holder)
+        _process(element, holder)
         for position, _ in enumerate(
-            zip_longest(holder.actual, holder.expected)
+            _zip_longest(holder.actual, holder.expected)
         ):
             actual, expected = holder.getpair(position)
             _assert.actual_expected(actual, expected, code_block)

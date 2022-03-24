@@ -92,7 +92,7 @@ def test_fallback_readme(tmpdir, make_readme, patch_argv):
     patch_argv()
     readme = make_readme("")
     with EnterDir(tmpdir):
-        parser = readmetester._main.ArgumentParser()
+        parser = readmetester._main._Parser()
 
     assert parser.args.file == readme
 
@@ -119,7 +119,7 @@ def test_no_code_block_found(make_readme, main):
 def test_seq():
     """Get coverage on ``Seq`` abstract methods."""
     # noinspection PyUnresolvedReferences
-    seq = readmetester._core.Seq()
+    seq = readmetester._core._Seq()
     seq.append("key")
     assert seq[0] == "key"
     seq[0] = "value"
@@ -127,7 +127,7 @@ def test_seq():
     del seq[0]
     assert not seq
     seq_repr = repr(seq)
-    assert seq_repr == "<Seq []>"
+    assert seq_repr == "<_Seq []>"
     seq_str = str(seq)
     assert seq_str == "[]"
 
