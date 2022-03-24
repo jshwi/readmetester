@@ -28,6 +28,7 @@ version = "1.1.0"
 Pygments = "^2.8.1"
 object-colors = "^2.0.0"
 python = "^3.8"
+pyproject-parser = "^0.4.3"
 
 [tool.poetry.dev-dependencies]
 bump2version = "^1.0.1"
@@ -90,3 +91,6 @@ formatter = "standard"
 when = "d"
 backupCount = 60
 filename = "~/.cache/pyaud/log/pyaud.log"
+
+[tool.readmetester]
+style = "monokai"

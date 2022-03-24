@@ -10,6 +10,7 @@ import collections
 import io
 import os
 import sys
+from pathlib import Path
 from typing import Any, Dict, Iterator, List, Union
 
 import object_colors
@@ -18,6 +19,7 @@ from pygments.formatters.terminal256 import Terminal256Formatter
 
 # noinspection PyUnresolvedReferences
 from pygments.lexers.python import PythonLexer
+from pyproject_parser import PyProject
 
 color = object_colors.Color()
 color.populate("fore")
@@ -141,6 +143,14 @@ class Actual(Seq):  # pylint: disable=too-few-public-methods
 class Total(Actual):
     """List containing total output to display."""
 
+    @staticmethod
+    def _highlight(value):
+        pyproject = PyProject.load(Path.cwd() / "pyproject.toml")
+        style = pyproject.tool.get("readmetester", {}).get("style", "default")
+        return highlight(
+            value, PythonLexer(), Terminal256Formatter(style=style)
+        )
+
     def append_header(self, value: str) -> None:
         """Append ``str`` to total as stylized header.
 
@@ -158,10 +168,7 @@ class Total(Actual):
 
         :param value: ``str`` to append with dotpoint.
         """
-        value = highlight(
-            value, PythonLexer(), Terminal256Formatter(style="monokai")
-        )
-        self.append(f". {value.strip()}")
+        self.append(f". {self._highlight(value).strip()}")
 
     def extend(self, values: Any) -> None:
         """Append value prefixed with a check symbol.

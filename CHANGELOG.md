@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/readmetester/compare/v1.1.0...HEAD)
 ------------------------------------------------------------------------
+### Added
+- Adds pyproject.toml configuration for style
 
 [1.1.0](https://github.com/jshwi/readmetester/releases/tag/v1.1.0) - 2022-03-24
 ------------------------------------------------------------------------

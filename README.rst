@@ -83,3 +83,11 @@ Continuation lines begin with ``"... "``
         0 zero
         1 one
         2 two
+
+
+Styles can be configured in a pyproject.toml file
+
+.. code-block:: toml
+
+    [tool.readmetester]
+    style = "monokai"
