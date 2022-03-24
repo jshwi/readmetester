@@ -12,7 +12,7 @@ from . import EnterDir, strings
 
 @pytest.mark.parametrize(
     "template,expected",
-    strings.TEMPLATES,
+    strings.templates,
     ids=[
         "simple",
         "simple-line-break",
@@ -46,7 +46,7 @@ def test_returns(nocolorcapsys, main, make_readme, template, expected):
 
 @pytest.mark.parametrize(
     "template,expected",
-    strings.ERRORS,
+    strings.errors,
     ids=["no-output-expected", "actual-ne-expected"],
 )
 def test_output_document_error(main, make_readme, template, expected):

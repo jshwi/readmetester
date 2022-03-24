@@ -2,29 +2,87 @@
 tests.strings
 =============
 """
+import typing as t
+from abc import ABC, abstractmethod
+
+templates = []
+errors = []
 
 
-def prepend_lines(prepend, iterable):
-    """Prepend every line in iterable with ``str``, most probably
-    ``CHECK``.
+class TemplateExpected(ABC):
+    """Base class for README template/expected tests."""
 
-    :param prepend:     ``str`` to prepend to every line in iterable.
-    :param iterable:    Iterable to prepend with ``str``.
-    :return:            Constructed ``str``.
+    SUCCESS = f"\n{80 * '-'}\nSuccess!"
+    CHECK = "\u2713"
+
+    @property
+    @abstractmethod
+    def template(self) -> str:
+        """Template to test."""
+
+    @property
+    @abstractmethod
+    def expected(self) -> str:
+        """Expected result."""
+
+
+def register_template(
+    template_expected: t.Type[TemplateExpected],
+) -> t.Type[TemplateExpected]:
+    """Register template/expected str objects for successful tests.
+
+    :param template_expected: ``TemplateExpected`` object.
+    :returns: ``TemplateExpected`` object.
     """
-    return "\n".join([f"{prepend} {i}" for i in iterable])
+    instance = template_expected()
+    templates.append((instance.template, instance.expected))
+    return template_expected
 
 
-SUCCESS = f"\n{80 * '-'}\nSuccess!"
-CHECK = "\u2713"
-SIMPLE = """
+def register_error(
+    template_expected: t.Type[TemplateExpected],
+) -> t.Type[TemplateExpected]:
+    """Register template/expected str objects for testing errors.
+
+    :param template_expected: ``TemplateExpected`` object.
+    :returns: ``TemplateExpected`` object.
+    """
+    instance = template_expected()
+    errors.append((instance.template, instance.expected))
+    return template_expected
+
+
+@register_template
+class Simple(TemplateExpected):
+    """Test for simple code-block."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
 
     >>> print("Hello, world!")
     'Hello, world!'
 ..
 """
-SIMPLE_LINE_BREAK = """
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> print("Hello, world!")
+{self.CHECK} Hello, world!
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class SimpleLineBreak(TemplateExpected):
+    """Test for simple code-block with line break."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
 
     >>> print("Hello, world!")
@@ -34,7 +92,26 @@ SIMPLE_LINE_BREAK = """
     'Hello, world!'
 ..
 """
-SIMPLE_NO_ENDING_DOTS = """
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> print("Hello, world!")
+{self.CHECK} Hello, world!
+. >>> print("Hello, world!")
+{self.CHECK} Hello, world!
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class SimpleNoEndingDots(TemplateExpected):
+    """Test for simple code-block with no closing dots."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
 
     >>> print("Hello, world!")
@@ -44,7 +121,28 @@ SIMPLE_NO_ENDING_DOTS = """
     >>> print("Hello, world!")
     'Hello, world!'
 """
-MULTILINE = """
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> print("Hello, world!")
+{self.CHECK} Hello, world!
+
+code-block 2
+. >>> print("Hello, world!")
+{self.CHECK} Hello, world!
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class Multiline(TemplateExpected):
+    """Test for multiline code-block."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
 
     >>> colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
@@ -73,7 +171,46 @@ MULTILINE = """
     9 strikethrough
 ..
 """
-OBJECT = """
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
+. >>> for i, c in enumerate(colors):
+. ...     print(i, c)
+{self.CHECK} 0 black
+{self.CHECK} 1 red
+{self.CHECK} 2 green
+{self.CHECK} 3 yellow
+{self.CHECK} 4 blue
+{self.CHECK} 5 magenta
+{self.CHECK} 6 cyan
+{self.CHECK} 7 white
+. >>> effects = ["none", "bold", "dim", "italic", "underline", "blink", "blinking", "negative", "empty", "strikethrough"]
+. >>> for i, e in enumerate(effects):
+. ...     print(i, e)
+{self.CHECK} 0 none
+{self.CHECK} 1 bold
+{self.CHECK} 2 dim
+{self.CHECK} 3 italic
+{self.CHECK} 4 underline
+{self.CHECK} 5 blink
+{self.CHECK} 6 blinking
+{self.CHECK} 7 negative
+{self.CHECK} 8 empty
+{self.CHECK} 9 strikethrough
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class ObjectCheck(TemplateExpected):
+    """Test for code-block containing object and ID."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
 
     >>> class Object:
@@ -83,7 +220,27 @@ OBJECT = """
     <readmetester._core.Object object at 0x7f4f52cf12e0>
 ..
 """
-HANGING_TUPLE = """
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> class Object:
+. ...     pass
+. >>> o = Object()
+. >>> print(o)
+{self.CHECK} <readmetester._core.Object at >
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class HangingTuple(TemplateExpected):
+    """Test for code-block containing a hanging tuple."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
 
     >>> t = (
@@ -103,7 +260,38 @@ HANGING_TUPLE = """
     4 four
     5 five
 .."""
-HANGING_LIST = """
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> t = (
+. ...     "zero",
+. ...     "one",
+. ...     "two",
+. ...     "three",
+. ...     "four",
+. ...     "five",
+. ... )
+. >>> for c, i in enumerate(t):
+. ...     print(c, i)
+{self.CHECK} 0 zero
+{self.CHECK} 1 one
+{self.CHECK} 2 two
+{self.CHECK} 3 three
+{self.CHECK} 4 four
+{self.CHECK} 5 five
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class HangingList(TemplateExpected):
+    """Test for code-block containing a hanging list."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
 
     >>> l = [
@@ -122,8 +310,40 @@ HANGING_LIST = """
     3 three
     4 four
     5 five
-.."""
-HANGING_DICT = """
+..
+"""
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> l = [
+. ...     "zero",
+. ...     "one",
+. ...     "two",
+. ...     "three",
+. ...     "four",
+. ...     "five",
+. ... ]
+. >>> for c, i in enumerate(l):
+. ...     print(c, i)
+{self.CHECK} 0 zero
+{self.CHECK} 1 one
+{self.CHECK} 2 two
+{self.CHECK} 3 three
+{self.CHECK} 4 four
+{self.CHECK} 5 five
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class HangingDict(TemplateExpected):
+    """Test for code-block containing a hanging dict."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
     >>> d = {
     ...     "one": 1,
@@ -141,7 +361,36 @@ HANGING_DICT = """
     five 5
 ..
 """
-NESTED_HANGING = """
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> d = {{
+. ...     "one": 1,
+. ...     "two": 2,
+. ...     "three": 3,
+. ...     "four": 4,
+. ...     "five": 5,
+. ... }}
+. >>> for k, v in d.items():
+. ...     print(k, v)
+{self.CHECK} one 1
+{self.CHECK} two 2
+{self.CHECK} three 3
+{self.CHECK} four 4
+{self.CHECK} five 5
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class NestedHanging(TemplateExpected):
+    """Test for code-block containing a nested hanging tuple."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
     >>> n = {
     ...     "nested": (
@@ -157,224 +406,83 @@ NESTED_HANGING = """
     tuple
 ..
 """
-with open("README.rst") as fin:
-    THIS_README = fin.read()
-TEMPLATES = [
-    (
-        SIMPLE,
-        'code-block 1\n. >>> print("Hello, world!")\n{} Hello, world!\n{}'.format(
-            CHECK, SUCCESS
-        ),
-    ),
-    (
-        SIMPLE_LINE_BREAK,
-        'code-block 1\n. >>> print("Hello, world!")\n{0} Hello, world!\n. >>> print("Hello, world!")\n{0} Hello, world!\n{1}'.format(
-            CHECK, SUCCESS
-        ),
-    ),
-    (
-        SIMPLE_NO_ENDING_DOTS,
-        'code-block 1\n. >>> print("Hello, world!")\n{0} Hello, world!\n\ncode-block 2\n. >>> print("Hello, world!")\n{0} Hello, world!\n{1}'.format(
-            CHECK, SUCCESS
-        ),
-    ),
-    (
-        MULTILINE,
-        (
-            "code-block 1\n"
-            '. >>> colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]\n'
-            ". >>> for i, c in enumerate(colors):\n"
-            ". ...     print(i, c)\n"
-        )
-        + prepend_lines(
-            CHECK,
-            (
-                "0 black",
-                "1 red",
-                "2 green",
-                "3 yellow",
-                "4 blue",
-                "5 magenta",
-                "6 cyan",
-                "7 white",
-            ),
-        )
-        + "\n"
-        + (
-            '. >>> effects = ["none", "bold", "dim", "italic", "underline", "blink", "blinking", "negative", "empty", "strikethrough"]\n'
-            ". >>> for i, e in enumerate(effects):\n"
-            ". ...     print(i, e)\n"
-        )
-        + prepend_lines(
-            CHECK,
-            (
-                "0 none",
-                "1 bold",
-                "2 dim",
-                "3 italic",
-                "4 underline",
-                "5 blink",
-                "6 blinking",
-                "7 negative",
-                "8 empty",
-                "9 strikethrough",
-            ),
-        )
-        + "\n"
-        + SUCCESS,
-    ),
-    (
-        OBJECT,
-        (
-            "code-block 1\n"
-            ". >>> class Object:\n"
-            ". ...     pass\n"
-            ". >>> o = Object()\n"
-            ". >>> print(o)\n"
-            + CHECK
-            + " <readmetester._core.Object at >\n"
-            + SUCCESS
-        ),
-    ),
-    (
-        HANGING_TUPLE,
-        (
-            "code-block 1\n"
-            ". >>> t = (\n"
-            '. ...     "zero",\n'
-            '. ...     "one",\n'
-            '. ...     "two",\n'
-            '. ...     "three",\n'
-            '. ...     "four",\n'
-            '. ...     "five",\n'
-            ". ... )\n"
-            ". >>> for c, i in enumerate(t):\n"
-            ". ...     print(c, i)\n"
-            + prepend_lines(
-                CHECK,
-                (
-                    "0 zero",
-                    "1 one",
-                    "2 two",
-                    "3 three",
-                    "4 four",
-                    "5 five",
-                ),
-            )
-            + "\n"
-            + SUCCESS
-        ),
-    ),
-    (
-        HANGING_LIST,
-        (
-            "code-block 1\n"
-            ". >>> l = [\n"
-            '. ...     "zero",\n'
-            '. ...     "one",\n'
-            '. ...     "two",\n'
-            '. ...     "three",\n'
-            '. ...     "four",\n'
-            '. ...     "five",\n'
-            ". ... ]\n"
-            ". >>> for c, i in enumerate(l):\n"
-            ". ...     print(c, i)\n"
-            + prepend_lines(
-                CHECK,
-                (
-                    "0 zero",
-                    "1 one",
-                    "2 two",
-                    "3 three",
-                    "4 four",
-                    "5 five",
-                ),
-            )
-            + "\n"
-            + SUCCESS
-        ),
-    ),
-    (
-        HANGING_DICT,
-        (
-            "code-block 1\n"
-            ". >>> d = {\n"
-            '. ...     "one": 1,\n'
-            '. ...     "two": 2,\n'
-            '. ...     "three": 3,\n'
-            '. ...     "four": 4,\n'
-            '. ...     "five": 5,\n'
-            ". ... }\n"
-            ". >>> for k, v in d.items():\n"
-            ". ...     print(k, v)\n"
-            + prepend_lines(
-                CHECK,
-                (
-                    "one 1",
-                    "two 2",
-                    "three 3",
-                    "four 4",
-                    "five 5",
-                ),
-            )
-            + "\n"
-            + SUCCESS
-        ),
-    ),
-    (
-        NESTED_HANGING,
-        (
-            "code-block 1\n"
-            ". >>> n = {\n"
-            '. ...     "nested": (\n'
-            '. ...         "a",\n'
-            '. ...         "nested",\n'
-            '. ...         "tuple",\n'
-            ". ...     )\n"
-            ". ... }\n"
-            '. >>> for i in n["nested"]:\n'
-            ". ...     print(i)\n"
-            + prepend_lines(
-                CHECK,
-                (
-                    "a",
-                    "nested",
-                    "tuple",
-                ),
-            )
-            + "\n"
-            + SUCCESS
-        ),
-    ),
-    (
-        THIS_README,
-        (
-            "code-block 1\n"
-            '. >>> print("Hello, world!")\n'
-            "{0} Hello, world!\n"
-            "\n"
-            "code-block 2\n"
-            ". >>> n = [\n"
-            '. ...     "zero",\n'
-            '. ...     "one",\n'
-            '. ...     "two",\n'
-            ". ... ]\n"
-            ". >>> for c, i in enumerate(n):\n"
-            ". ...     print(c, i)\n"
-            "{0} 0 zero\n"
-            "{0} 1 one\n"
-            "{0} 2 two\n"
-            "{1}"
-        ).format(CHECK, SUCCESS),
-    ),
-]
-ERR_NO_OUTPUT_EXPECTED = """
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> n = {{
+. ...     "nested": (
+. ...         "a",
+. ...         "nested",
+. ...         "tuple",
+. ...     )
+. ... }}
+. >>> for i in n["nested"]:
+. ...     print(i)
+{self.CHECK} a
+{self.CHECK} nested
+{self.CHECK} tuple
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class ThisReadme(TemplateExpected):
+    """Test against the README of this project."""
+
+    @property
+    def template(self) -> str:
+        with open("README.rst", encoding="utf-8") as fin:
+            return fin.read()
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> print("Hello, world!")
+{self.CHECK} Hello, world!
+
+code-block 2
+. >>> n = [
+. ...     "zero",
+. ...     "one",
+. ...     "two",
+. ... ]
+. >>> for c, i in enumerate(n):
+. ...     print(c, i)
+{self.CHECK} 0 zero
+{self.CHECK} 1 one
+{self.CHECK} 2 two
+{self.SUCCESS}\
+"""
+
+
+@register_error
+class ErrorNoOutputExpected(TemplateExpected):
+    """Test error when output expected and expected is not provided."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
 
     >>> print("Hello, world")
 ..
 """
-ERR_ACTUAL_NE_EXPECTED = """
+
+    @property
+    def expected(self) -> str:
+        return "command returned output but no output is expected"
+
+
+@register_error
+class ErrorActualNeExpected(TemplateExpected):
+    """Test error when actual result is not equal to expected."""
+
+    @property
+    def template(self) -> str:
+        return """
 .. code-block:: python
 
     >>> print("Hello, world!")
@@ -383,13 +491,7 @@ ERR_ACTUAL_NE_EXPECTED = """
     'Hello, world!'
 ..
 """
-ERRORS = [
-    (
-        ERR_NO_OUTPUT_EXPECTED,
-        "command returned output but no output is expected",
-    ),
-    (
-        ERR_ACTUAL_NE_EXPECTED,
-        "code-block 1: Hello, world! != Goodbye, world...",
-    ),
-]
+
+    @property
+    def expected(self) -> str:
+        return "code-block 1: Hello, world! != Goodbye, world..."
