@@ -19,6 +19,8 @@ from .src import (
 
 __version__ = "1.0.1"
 
+__all__ = ["Mapping", "Seq"]
+
 os.environ["PYCHARM_HOSTED"] = "True"
 
 
