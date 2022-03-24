@@ -2,12 +2,23 @@
 tests._test
 ===========
 """
+import typing as t
+
 # pylint: disable=protected-access
+from pathlib import Path
+
 import pytest
 
 import readmetester
 
-from . import EnterDir, strings
+from . import (
+    EnterDir,
+    MakeReadmeType,
+    MockMainType,
+    NoColorCapsys,
+    PatchArgvType,
+    strings,
+)
 
 
 @pytest.mark.parametrize(
@@ -30,7 +41,13 @@ from . import EnterDir, strings
         "no-output-or-expected",
     ],
 )
-def test_returns(nocolorcapsys, main, make_readme, template, expected):
+def test_returns(
+    nocolorcapsys: NoColorCapsys,
+    main: MockMainType,
+    make_readme: MakeReadmeType,
+    template: str,
+    expected: str,
+) -> None:
     """Test standard README and return values.
 
     :param nocolorcapsys:   ``capsys`` without ANSI color codes.
@@ -60,7 +77,13 @@ def test_returns(nocolorcapsys, main, make_readme, template, expected):
         "bad-syntax",
     ],
 )
-def test_output_document_error(main, make_readme, template, expected, error):
+def test_output_document_error(
+    main: MockMainType,
+    make_readme: MakeReadmeType,
+    template: str,
+    expected: str,
+    error: t.Type[readmetester.exceptions.DocumentError],
+) -> None:
     """Test error when no output documentation provided.
 
     :param main:            Mock the main function for the package.
@@ -78,7 +101,9 @@ def test_output_document_error(main, make_readme, template, expected, error):
     assert str(err.value) == expected
 
 
-def test_fallback_readme(tmp_path, make_readme, patch_argv):
+def test_fallback_readme(
+    tmp_path: Path, make_readme: MakeReadmeType, patch_argv: PatchArgvType
+) -> None:
     """Test fallback README.rst is used if no args are provided and a
     README.rst file is present in the current working dir.
 
@@ -97,7 +122,9 @@ def test_fallback_readme(tmp_path, make_readme, patch_argv):
     assert parser.file == readme
 
 
-def test_no_code_block_found(make_readme, main):
+def test_no_code_block_found(
+    make_readme: MakeReadmeType, main: MockMainType
+) -> None:
     """Test appropriate stdout is produced when no code-block has been
     parsed from file.
 
@@ -116,7 +143,7 @@ def test_no_code_block_found(make_readme, main):
             main(str(readme))
 
 
-def test_seq():
+def test_seq() -> None:
     """Get coverage on ``Seq`` abstract methods."""
     # noinspection PyUnresolvedReferences
     seq = readmetester._core._Seq()
@@ -132,7 +159,12 @@ def test_seq():
     assert seq_str == "[]"
 
 
-def test_no_pyproject_toml(tmp_path, main, make_readme, patch_argv):
+def test_no_pyproject_toml(
+    tmp_path: Path,
+    main: MockMainType,
+    make_readme: MakeReadmeType,
+    patch_argv: PatchArgvType,
+) -> None:
     """Test no error is raised when no pyproject.toml in project.
 
     No need to run assertion. Test passes if ``FileNotFoundError`` not
@@ -151,7 +183,11 @@ def test_no_pyproject_toml(tmp_path, main, make_readme, patch_argv):
         main(str(readme))
 
 
-def test_print_version(monkeypatch, main, nocolorcapsys) -> None:
+def test_print_version(
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
+) -> None:
     """Test printing of version on commandline.
 
     :param monkeypatch:     Mock patch environment and attributes.

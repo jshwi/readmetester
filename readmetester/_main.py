@@ -45,7 +45,7 @@ def _process(lines: str, holder: _Holder) -> None:
                 with _CatchStdout() as stdout:
                     command.exec()
 
-                value = stdout.getvalue()
+                value = stdout.getparts()
                 if value is not None:
                     holder.catch_output(value)
         elif line != ">>>":
