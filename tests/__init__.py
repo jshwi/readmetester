@@ -72,10 +72,10 @@ class EnterDir:
 
     def __init__(self, new_path):
         self.saved_path = Path.cwd()
-        self.enter_path = new_path.expanduser()
+        os.chdir(new_path.expanduser())
 
     def __enter__(self):
-        os.chdir(self.enter_path)
+        return self
 
-    def __exit__(self, _, value, __):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         os.chdir(self.saved_path)
