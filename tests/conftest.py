@@ -54,7 +54,7 @@ def fixture_make_readme(tmpdir):
 
     def _make_readme(template):
         readme = os.path.join(tmpdir, "README.rst")
-        with open(readme, "w") as fout:
+        with open(readme, "w", encoding="utf-8") as fout:
             fout.write(template)
 
         return readme

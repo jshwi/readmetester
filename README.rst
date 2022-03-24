@@ -12,9 +12,6 @@ READMETester
 .. image:: https://codecov.io/gh/jshwi/readmetester/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/jshwi/readmetester
     :alt: codecov.io
-.. image:: https://readthedocs.org/projects/readmetester/badge/?version=latest
-    :target: https://readmetester.readthedocs.io/en/latest/?badge=latest
-    :alt: readthedocs.org
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
     :target: https://lbesson.mit-license.org/
     :alt: mit

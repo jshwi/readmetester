@@ -23,3 +23,30 @@ addopts = [
 ]
 norecursedirs = ["docs", "*.egg-info", ".git", ".mypy_cache", ".idea", "prof"]
 filterwarnings = "ignore::DeprecationWarning"
+
+[tool.poetry]
+name = "readmetester"
+version = "1.0.1"
+description = "Parse, test, and assert RST code-blocks"
+authors = ["jshwi <stephen@jshwisolutions.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+object-colors = "^2.0.0"
+Pygments = "^2.8.1"
+
+[tool.poetry.dev-dependencies]
+bump2version = "^1.0.1"
+ipython = "^7.19.0"
+prompt-toolkit = "^3.0.13"
+pyaud = "^3.1.0"
+pytest = "^6.2.1"
+restview = "^2.9.2"
+
+[tool.poetry.scripts]
+readmetester = "readmetester:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

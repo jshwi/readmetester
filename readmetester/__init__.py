@@ -44,7 +44,7 @@ def process(lines: str, holder: Holder) -> None:
 
         # any lines beginning with ``>>> `` or ``... `` are
         # considered commands
-        if any([line.startswith(i) for i in (">>> ", "... ")]):
+        if any(line.startswith(i) for i in (">>> ", "... ")):
             holder["total"].append_command(line)
             command.append(line)
 
