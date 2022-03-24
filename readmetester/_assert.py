@@ -19,10 +19,10 @@ def equality(
 ) -> None:
     """Test actual value against expected value.
 
-    :param actual:                  Actual command output.
-    :param expected:                Expected command output.
-    :param code_block:              code-block x of all code-blocks.
-    :raises OutputDocumentError:    If assertion fails.
+    :param actual: Actual command output.
+    :param expected: Expected command output.
+    :param code_block: code-block x of all code-blocks.
+    :raises OutputDocumentError: If assertion fails.
     """
     if actual is not None and expected is not None:
         try:
@@ -40,13 +40,13 @@ def actual_expected(
 ) -> None:
     """Test equality of actual and expected results.
 
-    :param actual:                  Actual output produced.
-    :param expected:                Expected output to be produced.
-    :param code_block:              code-block x of all code-blocks.
-    :raise OutputExpectedError:     Raises if output expected but none
-                                    was produced.
-    :raise OutputNotExpectedError:  Raises if output was not expected
-                                    and output was produced.
+    :param actual: Actual output produced.
+    :param expected: Expected output to be produced.
+    :param code_block: code-block x of all code-blocks.
+    :raise OutputExpectedError: Raises if output expected but none was
+        produced.
+    :raise OutputNotExpectedError: Raises if output was not expected
+        and output was produced.
     """
     if actual is None and expected is not None:
         raise _exceptions.OutputExpectedError(code_block, expected)

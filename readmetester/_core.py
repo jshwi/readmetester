@@ -38,7 +38,7 @@ _os.environ["PYCHARM_HOSTED"] = "True"
 
 
 class Parser(_ArgumentParser):
-    """Parse commandline arguments and hold the file path.."""
+    """Parse commandline arguments and hold the file path."""
 
     def __init__(self) -> None:
         readme = _Path.cwd() / "README.rst"
@@ -92,8 +92,8 @@ class _Seq(_MutableSequence):
     def insert(self, index: int, value: str) -> None:
         """Insert values into ``_list`` object.
 
-        :param index:   ``list`` index to insert ``value``.
-        :param value:   Value to insert into list.
+        :param index: ``list`` index to insert ``value``.
+        :param value: Value to insert into list.
         """
         self._list.insert(index, value)
 
@@ -102,6 +102,8 @@ class Readme(_Seq):  # pylint: disable=too-few-public-methods
     """Behaves like``list`` object.
 
     Read and hold ines from README file.
+
+    :param filepath: Path to README.rst file.
     """
 
     def __init__(self, filepath: _Path) -> None:
@@ -123,14 +125,20 @@ class Readme(_Seq):  # pylint: disable=too-few-public-methods
 
             elif block:
                 if element == "..":
+
+                    # block completed with two dots and not a second
+                    # newline
                     self._end_line_switch = False
                     return
 
                 if element == "":
+
+                    # block completed with second newline
                     if self._end_line_switch:
                         self._end_line_switch = False
                         return
 
+                    # block commenced with first newline
                     self._end_line_switch = True
                     continue
 
@@ -143,8 +151,8 @@ class Actual(_Seq):  # pylint: disable=too-few-public-methods
     def insert(self, index: int, value: str) -> None:
         """Remove hex substrings returned from classes.
 
-        :param index:   ``list`` index to insert ``value``.
-        :param value:   Value to insert into list.
+        :param index: ``list`` index to insert ``value``.
+        :param value: Value to insert into list.
         """
         string = []
         for substring in value.split(" "):

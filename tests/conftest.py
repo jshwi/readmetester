@@ -17,7 +17,7 @@ def fixture_patch_argv(monkeypatch: pytest.MonkeyPatch) -> PatchArgvType:
     """Function for passing mock commandline arguments to ``sys.argv``.
 
     :param monkeypatch: ``pytest`` fixture for mocking attributes.
-    :return:            Function for using this fixture.
+    :return: Function for using this fixture.
     """
 
     def _argv(*args: str) -> None:
@@ -29,11 +29,10 @@ def fixture_patch_argv(monkeypatch: pytest.MonkeyPatch) -> PatchArgvType:
 
 @pytest.fixture(name="main")
 def fixture_main(patch_argv: PatchArgvType) -> MockMainType:
-    """Function for passing mock ``readmetester.main`` commandline
-    arguments to package's main function.
+    """Pass mock ``readmetester.main`` commandline args to main.
 
-    :param patch_argv:  Set args with ``sys.argv``
-    :return:            Function for using this fixture.
+    :param patch_argv: Set args with ``sys.argv``
+    :return: Function for using this fixture.
     """
 
     def _main(*args: str) -> None:
@@ -48,8 +47,8 @@ def fixture_main(patch_argv: PatchArgvType) -> MockMainType:
 def fixture_make_readme(tmp_path: Path) -> MakeReadmeType:
     """Make temp README.
 
-    :param tmp_path:    Fixture for creating and returning temporary
-                        directory.
+    :param tmp_path: Fixture for creating and returning temporary
+        directory.
     """
 
     def _make_readme(template: str) -> Path:
@@ -65,8 +64,8 @@ def fixture_nocolorcapsys(capsys: pytest.CaptureFixture) -> NoColorCapsys:
     """Instantiate capsys with the regex method.
 
     :param capsys: ``pytest`` fixture for capturing output stream.
-    :return:        Instantiated ``NoColorCapsys`` object for capturing
-                    output stream and sanitizing the string if it
-                    contains ANSI escape codes.
+    :return: Instantiated ``NoColorCapsys`` object for capturing output
+        stream and sanitizing the string if it contains ANSI escape
+        codes.
     """
     return NoColorCapsys(capsys)

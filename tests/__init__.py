@@ -34,8 +34,7 @@ class NoColorCapsys:
 
     @staticmethod
     def regex(out: str) -> str:
-        """Replace ANSI color codes with empty strings i.e. remove all
-        escape codes.
+        """Remove all ANSI escape codes.
 
         Prefer to test colored output this way as colored strings can
         be tricky and the effort in testing their validity really isn't
@@ -43,17 +42,16 @@ class NoColorCapsys:
         the codes).
 
         :param out: String to strip of ANSI escape codes
-        :return:    Same string but without ANSI codes
+        :return: Same string but without ANSI codes
         """
         ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
         return ansi_escape.sub("", out)
 
     def readouterr(self) -> t.List[str]:
-        """Call as capsys ``readouterr`` but regex the strings for
-        escape codes at the same time.
+        """Call as capsys ``readouterr`` and strip ANSI escape codes.
 
-        :return:    A tuple (just like the capsys) containing stdout in
-                    the first index and stderr in the second
+        :return: A tuple (just like the capsys) containing stdout in the
+            first index and stderr in the second
         """
         return [
             "\n".join([i.strip() for i in s.split("\n")]).strip()
@@ -64,8 +62,7 @@ class NoColorCapsys:
         return self.readouterr()[idx]
 
     def stdout(self) -> str:
-        """Call this to return the stdout without referencing the tuple
-        indices.
+        """Call this to return the stdout without referencing  indices.
 
         :return: Stdout.
         """
@@ -73,10 +70,9 @@ class NoColorCapsys:
 
 
 class EnterDir:
-    """Change to the selected directory entered as an argument and when
-    actions are complete return to the previous directory.
+    """Change directory and back on exit.
 
-    :param new_path: Enter the directory to temporarily change to
+    :param new_path: The directory to temporarily change to.
     """
 
     def __init__(self, new_path: Path) -> None:

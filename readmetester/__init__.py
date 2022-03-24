@@ -1,6 +1,8 @@
 """
 readmetester
 ============
+
+Parse, test, and assert RST code-blocks
 """
 from . import exceptions
 from ._main import main
