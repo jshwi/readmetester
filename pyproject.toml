@@ -22,7 +22,7 @@ authors = ["jshwi <stephen@jshwisolutions.com>"]
 description = "Parse, test, and assert RST code-blocks"
 license = "MIT"
 name = "readmetester"
-version = "1.0.1"
+version = "1.1.0"
 
 [tool.poetry.dependencies]
 Pygments = "^2.8.1"
