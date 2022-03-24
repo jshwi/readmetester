@@ -43,7 +43,7 @@ def process(lines: str, holder: _Holder) -> None:
                 with _CatchStdout() as stdout:
                     _command.exec()
 
-                value = stdout.getvalue()
+                value = stdout.getparts()
                 if value is not None:
                     holder["actual"].extend(value)
                     holder["total"].extend(value)

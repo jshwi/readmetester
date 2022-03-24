@@ -145,10 +145,10 @@ class _Actual(Seq):  # pylint: disable=too-few-public-methods
 
 
 class _Total(_Actual):
-    """t.List containing total output to display."""
+    """List containing total output to display."""
 
     @staticmethod
-    def _highlight(value):
+    def _highlight(value: str) -> str:
         style = "default"
         pyproject_file = _Path.cwd() / "pyproject.toml"
         if pyproject_file.is_file():
@@ -173,14 +173,14 @@ class _Total(_Actual):
             )
         )
 
-    def append_command(self, value: _t.Any) -> None:
+    def append_command(self, value: str) -> None:
         """Append value prefixed with a dotpoint.
 
         :param value: ``str`` to append with dotpoint.
         """
         self.append(f". {self._highlight(value).strip()}")
 
-    def extend(self, values: _t.Any) -> None:
+    def extend(self, values: _t.Iterable[_t.Any]) -> None:
         """Append value prefixed with a check symbol.
 
         :param values: ``str`` to append with check symbol.
@@ -207,7 +207,11 @@ class CatchStdout(_StringIO):
         self._freeze = _sys.stdout
         _sys.stdout = self
 
-    def getvalue(self) -> _t.Any:
+    def getparts(self) -> _t.Optional[_t.List[str]]:
+        """Get list of stdout if captured, else None.
+
+        :return: List object if stdout captured, else None.
+        """
         value = super().getvalue()
         return (
             None if value == "" else [i for i in value.split("\n") if i != ""]
@@ -273,7 +277,7 @@ class _Parenthesis(Seq):
 
     _brackets = {"open": ("(", "{", "["), "close": (")", "}", "]")}
 
-    def _reverse(self, key: _t.Any, bracket: str) -> str:
+    def _reverse(self, key: str, bracket: str) -> str:
         other = "open" if key == "close" else "close"
         return self._brackets[other][self._brackets[key].index(bracket)]
 

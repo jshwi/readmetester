@@ -3,11 +3,14 @@ tests._test
 ===========
 """
 # pylint: disable=protected-access
+import typing as t
+from pathlib import Path
+
 import pytest
 
 import readmetester
 
-from . import EnterDir, strings
+from . import EnterDir, NoColorCapsys, strings
 
 
 @pytest.mark.parametrize(
@@ -26,7 +29,13 @@ from . import EnterDir, strings
         "this-readme",
     ],
 )
-def test_returns(nocolorcapsys, main, make_readme, template, expected):
+def test_returns(
+    nocolorcapsys: NoColorCapsys,
+    main: t.Any,
+    make_readme: t.Any,
+    template: str,
+    expected: str,
+) -> None:
     """Test standard README and return values.
 
     :param nocolorcapsys:   ``capsys`` without ANSI color codes.
@@ -49,7 +58,9 @@ def test_returns(nocolorcapsys, main, make_readme, template, expected):
     strings.errors,
     ids=["no-output-expected", "actual-ne-expected"],
 )
-def test_output_document_error(main, make_readme, template, expected):
+def test_output_document_error(
+    main: t.Any, make_readme: t.Any, template: str, expected: str
+) -> None:
     """Test error when no output documentation provided.
 
     :param main:            Mock the main function for the package.
@@ -67,7 +78,9 @@ def test_output_document_error(main, make_readme, template, expected):
     assert str(err.value) == expected
 
 
-def test_fallback_readme(tmp_path, make_readme, patch_argv):
+def test_fallback_readme(
+    tmp_path: Path, make_readme: t.Any, patch_argv: t.Any
+) -> None:
     """Test fallback README.rst is used if no args are provided and a
     README.rst file is present in the current working dir.
 
@@ -86,7 +99,9 @@ def test_fallback_readme(tmp_path, make_readme, patch_argv):
     assert parser.file == readme
 
 
-def test_no_code_block_found(make_readme, main, capsys):
+def test_no_code_block_found(
+    make_readme: t.Any, main: t.Any, capsys: pytest.CaptureFixture
+) -> None:
     """Test appropriate stdout is produced when no code-block has been
     parsed from file.
 
@@ -104,7 +119,7 @@ def test_no_code_block_found(make_readme, main, capsys):
     assert output.out.strip() == "File contains no code-blocks"
 
 
-def test_seq():
+def test_seq() -> None:
     """Get coverage on ``Seq`` abstract methods."""
     # noinspection PyUnresolvedReferences
     seq = readmetester._core.Seq()
@@ -120,7 +135,7 @@ def test_seq():
     assert seq_str == "[]"
 
 
-def test_mapping():
+def test_mapping() -> None:
     """Get coverage on ``Mapping`` abstract methods."""
     # noinspection PyUnresolvedReferences
     mapping = readmetester._core.Mapping()
@@ -130,7 +145,9 @@ def test_mapping():
     assert mapping_str == "{}"
 
 
-def test_no_pyproject_toml(tmp_path, main, make_readme, patch_argv):
+def test_no_pyproject_toml(
+    tmp_path: Path, main: t.Any, make_readme: t.Any, patch_argv: t.Any
+) -> None:
     """Test no error is raised when no pyproject.toml in project.
 
     No need to run assertion. Test passes if ``FileNotFoundError`` not
