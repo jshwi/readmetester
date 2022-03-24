@@ -106,7 +106,7 @@ class Readme(Seq):  # pylint: disable=too-few-public-methods
                 yield [*self._partition_blocks(elements, block=True)]
 
             elif block:
-                if element.endswith(".."):
+                if element == "..":
                     return
 
                 yield element
