@@ -94,7 +94,7 @@ def main() -> None:
     """
     parser = _Parser()
     holder = _Holder()
-    readme = _Readme(parser.args.file)
+    readme = _Readme(parser.file)
     if readme:
         for count, element in enumerate(readme):
             code_block = f"code-block {count + 1}"

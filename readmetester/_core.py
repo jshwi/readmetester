@@ -40,13 +40,14 @@ class Parser(_ArgumentParser):
     """Parse commandline arguments and hold the file path.."""
 
     def __init__(self) -> None:
-        readme = _os.path.join(_os.getcwd(), "README.rst")
-        if len(_sys.argv) < 2 and _os.path.isfile(readme):
-            _sys.argv.append(readme)
+        readme = _Path.cwd() / "README.rst"
+        if len(_sys.argv) < 2 and readme.is_file():
+            _sys.argv.append(str(readme))
 
         super().__init__()
         self.add_argument("file", action="store")
-        self.args = self.parse_args()
+        self._args = self.parse_args()
+        self.file = _Path(self._args.file)
 
 
 class Seq(_MutableSequence):
@@ -88,7 +89,7 @@ class Readme(Seq):  # pylint: disable=too-few-public-methods
     Read and hold ines from README file.
     """
 
-    def __init__(self, filepath: _t.Union[bytes, str, _os.PathLike]) -> None:
+    def __init__(self, filepath: _Path) -> None:
         super().__init__()
         self._end_line_switch = False
         with open(filepath, encoding="utf-8") as fin:

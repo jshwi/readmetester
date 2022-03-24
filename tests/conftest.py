@@ -2,7 +2,6 @@
 tests.conftest
 ==============
 """
-import os
 import sys
 
 import pytest
@@ -45,18 +44,16 @@ def fixture_main(patch_argv):
 
 
 @pytest.fixture(name="make_readme")
-def fixture_make_readme(tmpdir):
+def fixture_make_readme(tmp_path):
     """Make temp README.
 
-    :param tmpdir:  Fixture for creating and returning temporary
-                    directory.
+    :param tmp_path:    Fixture for creating and returning temporary
+                        directory.
     """
 
     def _make_readme(template):
-        readme = os.path.join(tmpdir, "README.rst")
-        with open(readme, "w", encoding="utf-8") as fout:
-            fout.write(template)
-
+        readme = tmp_path / "README.rst"
+        readme.write_text(template, encoding="utf-8")
         return readme
 
     return _make_readme

@@ -39,7 +39,7 @@ def test_returns(nocolorcapsys, main, make_readme, template, expected):
     :param expected:        Expected stdout.
     """
     readme = make_readme(template)
-    main(readme)
+    main(str(readme))
     output = nocolorcapsys.stdout()
     assert output == expected
 
@@ -62,16 +62,16 @@ def test_output_document_error(main, make_readme, template, expected):
     """
     readme = make_readme(template)
     with pytest.raises(readmetester.exceptions.OutputDocumentError) as err:
-        main(readme)
+        main(str(readme))
 
     assert str(err.value) == expected
 
 
-def test_fallback_readme(tmpdir, make_readme, patch_argv):
+def test_fallback_readme(tmp_path, make_readme, patch_argv):
     """Test fallback README.rst is used if no args are provided and a
     README.rst file is present in the current working dir.
 
-    :param tmpdir:      Fixture for creating and returning temporary
+    :param tmp_path:    Fixture for creating and returning temporary
                         directory.
     :param make_readme: Create a README.rst file in the temp dir
                         containing the provided ``str``.
@@ -80,10 +80,10 @@ def test_fallback_readme(tmpdir, make_readme, patch_argv):
     """
     patch_argv()
     readme = make_readme("")
-    with EnterDir(tmpdir):
+    with EnterDir(tmp_path):
         parser = readmetester._main._Parser()
 
-    assert parser.args.file == readme
+    assert parser.file == readme
 
 
 def test_no_code_block_found(make_readme, main, capsys):
@@ -99,7 +99,7 @@ def test_no_code_block_found(make_readme, main, capsys):
     :param capsys:      ``pytest`` fixture for capturing output stream.
     """
     readme = make_readme("")
-    main(readme)
+    main(str(readme))
     output = capsys.readouterr()
     assert output.out.strip() == "File contains no code-blocks"
 
@@ -130,13 +130,13 @@ def test_mapping():
     assert mapping_str == "{}"
 
 
-def test_no_pyproject_toml(tmpdir, main, make_readme, patch_argv):
+def test_no_pyproject_toml(tmp_path, main, make_readme, patch_argv):
     """Test no error is raised when no pyproject.toml in project.
 
     No need to run assertion. Test passes if ``FileNotFoundError`` not
     raised.
 
-    :param tmpdir:      Fixture for creating and returning temporary
+    :param tmp_path:    Fixture for creating and returning temporary
                         directory.
     :param make_readme: Create a README.rst file in the temp dir
                         containing the provided ``str``.
@@ -145,5 +145,5 @@ def test_no_pyproject_toml(tmpdir, main, make_readme, patch_argv):
     """
     patch_argv()
     readme = make_readme(strings.Simple().template)
-    with EnterDir(tmpdir):
-        main(readme)
+    with EnterDir(tmp_path):
+        main(str(readme))
