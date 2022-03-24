@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [Unreleased](https://github.com/jshwi/readmetester/compare/v1.0.1...HEAD)
 ------------------------------------------------------------------------
 ### Added
+- Allows line break to end code block
 - Allows line breaks in code blocks for evaluated code
 - Adds `__all__` to `readmetester.__init__`
 

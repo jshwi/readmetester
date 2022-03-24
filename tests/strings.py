@@ -34,6 +34,16 @@ SIMPLE_LINE_BREAK = """
     'Hello, world!'
 ..
 """
+SIMPLE_NO_ENDING_DOTS = """
+.. code-block:: python
+
+    >>> print("Hello, world!")
+    'Hello, world!'
+    
+.. code-block:: python
+    >>> print("Hello, world!")
+    'Hello, world!'
+"""
 MULTILINE = """
 .. code-block:: python
 
@@ -157,6 +167,12 @@ TEMPLATES = [
     (
         SIMPLE_LINE_BREAK,
         'code-block 1\n. >>> print("Hello, world!")\n{0} Hello, world!\n. >>> print("Hello, world!")\n{0} Hello, world!\n{1}'.format(
+            CHECK, SUCCESS
+        ),
+    ),
+    (
+        SIMPLE_NO_ENDING_DOTS,
+        'code-block 1\n. >>> print("Hello, world!")\n{0} Hello, world!\n\ncode-block 2\n. >>> print("Hello, world!")\n{0} Hello, world!\n{1}'.format(
             CHECK, SUCCESS
         ),
     ),

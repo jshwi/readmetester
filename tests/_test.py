@@ -16,6 +16,7 @@ from . import EnterDir, strings
     ids=[
         "simple",
         "simple-line-break",
+        "simple-no-ending-dots",
         "multiple",
         "object",
         "hanging-tuple",

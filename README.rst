@@ -34,9 +34,7 @@ Code blocks need to begin with
 
 followed by a blank line
 
-and end with
-
-``..``
+End a code block with another blank line
 
 **Usage**
 
@@ -68,8 +66,6 @@ Expected output can be single quoted or unquoted (no double quotes)
 
         >>> print("Hello, world!")
         'Hello, world!'
-    ..
-..
 
 Continuation lines begin with ``"... "``
 
@@ -87,6 +83,3 @@ Continuation lines begin with ``"... "``
         0 zero
         1 one
         2 two
-    ..
-..
-

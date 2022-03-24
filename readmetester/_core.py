@@ -85,16 +85,11 @@ class Readme(Seq):  # pylint: disable=too-few-public-methods
 
     def __init__(self, filepath: Union[bytes, str, os.PathLike]) -> None:
         super().__init__()
+        self._end_line_switch = False
         with open(filepath, encoding="utf-8") as fin:
             self.extend(
                 self._partition_blocks(
-                    iter(
-                        [
-                            i.lstrip()
-                            for i in fin.read().splitlines()
-                            if i != ""
-                        ]
-                    )
+                    iter([i.lstrip() for i in fin.read().splitlines()])
                 )
             )
 
@@ -107,7 +102,16 @@ class Readme(Seq):  # pylint: disable=too-few-public-methods
 
             elif block:
                 if element == "..":
+                    self._end_line_switch = False
                     return
+
+                if element == "":
+                    if self._end_line_switch:
+                        self._end_line_switch = False
+                        return
+
+                    self._end_line_switch = True
+                    continue
 
                 yield element
 
