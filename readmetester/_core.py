@@ -145,8 +145,14 @@ class Total(Actual):
 
     @staticmethod
     def _highlight(value):
-        pyproject = PyProject.load(Path.cwd() / "pyproject.toml")
-        style = pyproject.tool.get("readmetester", {}).get("style", "default")
+        style = "default"
+        pyproject_file = Path.cwd() / "pyproject.toml"
+        if pyproject_file.is_file():
+            pyproject_obj = PyProject.load(pyproject_file)
+            style = pyproject_obj.tool.get("readmetester", {}).get(
+                "style", style
+            )
+
         return highlight(
             value, PythonLexer(), Terminal256Formatter(style=style)
         )

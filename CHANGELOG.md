@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/readmetester/compare/v1.2.0...HEAD)
 ------------------------------------------------------------------------
+### Fix
+- Prevents error from being raised if pyproject.toml not in project
 
 [1.2.0](https://github.com/jshwi/readmetester/releases/tag/v1.2.0) - 2022-03-24
 ------------------------------------------------------------------------

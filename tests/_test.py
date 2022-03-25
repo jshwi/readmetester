@@ -128,3 +128,22 @@ def test_mapping():
     assert mapping_repr == "<Mapping {}>"
     mapping_str = str(mapping)
     assert mapping_str == "{}"
+
+
+def test_no_pyproject_toml(tmpdir, main, make_readme, patch_argv):
+    """Test no error is raised when no pyproject.toml in project.
+
+    No need to run assertion. Test passes if ``FileNotFoundError`` not
+    raised.
+
+    :param tmpdir:      Fixture for creating and returning temporary
+                        directory.
+    :param make_readme: Create a README.rst file in the temp dir
+                        containing the provided ``str``.
+    :param patch_argv:  Set args with ``sys.argv``. Clears pytest
+                        arguments for this test.
+    """
+    patch_argv()
+    readme = make_readme(strings.Simple().template)
+    with EnterDir(tmpdir):
+        main(readme)
