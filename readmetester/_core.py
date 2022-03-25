@@ -253,11 +253,7 @@ class Holder(Mapping):  # pylint: disable=too-few-public-methods
 
     def _init_object(self) -> None:
         self.update(
-            {
-                "actual": Actual(),
-                "expected": Expected(),
-                "total": Total(),
-            }
+            {"actual": Actual(), "expected": Expected(), "total": Total()}
         )
 
     def clear(self) -> None:
