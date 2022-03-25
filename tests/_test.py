@@ -137,3 +137,19 @@ def test_no_pyproject_toml(tmpdir, main, make_readme, patch_argv):
     readme = make_readme(strings.Simple().template)
     with EnterDir(tmpdir):
         main(readme)
+
+
+def test_print_version(monkeypatch, main, nocolorcapsys) -> None:
+    """Test printing of version on commandline.
+
+    :param monkeypatch:     Mock patch environment and attributes.
+    :param main:            Patch package entry point.
+    :param nocolorcapsys:   Capture system output while stripping ANSI
+                            color codes.
+    """
+    monkeypatch.setattr("readmetester._core.__version__", "1.0.0")
+    with pytest.raises(SystemExit):
+        main("--version")
+
+    out = nocolorcapsys.stdout().strip()
+    assert out == "1.0.0"

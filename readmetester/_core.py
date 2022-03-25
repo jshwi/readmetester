@@ -21,6 +21,8 @@ from pygments.formatters.terminal256 import Terminal256Formatter
 from pygments.lexers.python import PythonLexer
 from pyproject_parser import PyProject
 
+from ._version import __version__
+
 color = object_colors.Color()
 color.populate("fore")
 for foreground in color.colors:
@@ -42,8 +44,20 @@ class ArgumentParser(argparse.ArgumentParser):
             sys.argv.append(readme)
 
         super().__init__()
+        self._version_request()
         self.add_argument("file", action="store")
         self.args = self.parse_args()
+
+    def _version_request(self) -> None:
+        # print version if `--version` is passed to commandline
+        version = "--version"
+        self.add_argument(
+            version, action="store_true", help="show version and exit"
+        )
+        # the only exception for not providing positional args
+        if sys.argv[1] == version:
+            print(__version__)
+            sys.exit(0)
 
 
 class Seq(collections.MutableSequence):

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/readmetester/compare/v2.0.0...HEAD)
 ------------------------------------------------------------------------
+### Added
+- Adds `--version` optional argument
 
 [2.0.0](https://github.com/jshwi/readmetester/releases/tag/v2.0.0) - 2022-03-26
 ------------------------------------------------------------------------
