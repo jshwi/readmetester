@@ -7,10 +7,10 @@ from ._core import (
     CROSS,
     ArgumentParser,
     CatchStdout,
+    Command,
     Holder,
+    Parenthesis,
     Readme,
-    command,
-    parenthesis,
 )
 
 
@@ -28,6 +28,8 @@ def process(lines: str, holder: Holder) -> None:
     :param lines:   Lines from README file.
     :param holder:  Holding object.
     """
+    command = Command()
+    parenthesis = Parenthesis()
     for line in lines:
 
         # any lines beginning with ``>>> `` or ``... `` are
