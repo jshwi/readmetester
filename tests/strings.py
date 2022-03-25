@@ -2,6 +2,7 @@
 tests.strings
 =============
 """
+import os
 import typing as t
 from abc import ABC, abstractmethod
 
@@ -431,9 +432,14 @@ code-block 1
 class ThisReadme(TemplateExpected):
     """Test against the README of this project."""
 
+    README = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "README.rst",
+    )
+
     @property
     def template(self) -> str:
-        with open("README.rst", encoding="utf-8") as fin:
+        with open(self.README, encoding="utf-8") as fin:
             return fin.read()
 
     @property
