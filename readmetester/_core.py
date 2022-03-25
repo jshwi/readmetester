@@ -25,6 +25,7 @@ from pygments.lexers.python import PythonLexer as _PythonLexer
 from pyproject_parser import PyProject as _PyProject
 
 from . import exceptions as _exceptions
+from ._version import __version__
 
 color = _Color()
 color.populate("fore")
@@ -47,6 +48,9 @@ class Parser(_ArgumentParser):
     def __init__(self, path: _t.Union[str, _Path]) -> None:
         super().__init__()
         self.add_argument("file", nargs="?", action="store", default=path)
+        self.add_argument(
+            "--version", action="store_true", help="show version and exit"
+        )
         self._args = self.parse_args()
         self.file = _Path(self._args.file)
 
@@ -397,3 +401,14 @@ def run_assertion(holder: Holder, position: int, code_block: str) -> None:
         raise _exceptions.OutputDocumentError(
             f"{code_block}: {expected} != {actual}"
         ) from err
+
+
+def version_request() -> None:
+    """Print version if `--version` is passed to commandline."""
+    try:
+        # the only exception for not providing positional args
+        if _sys.argv[1] == "--version":
+            print(__version__)
+            _sys.exit(0)
+    except IndexError:
+        pass

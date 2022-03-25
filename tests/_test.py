@@ -161,3 +161,42 @@ def test_no_pyproject_toml(
     readme = make_readme(strings.Simple().template)
     with EnterDir(tmp_path):
         main(str(readme))
+
+
+def test_print_version(
+    monkeypatch: pytest.MonkeyPatch, main: t.Any, nocolorcapsys: NoColorCapsys
+) -> None:
+    """Test printing of version on commandline.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    """
+    monkeypatch.setattr("readmetester._core.__version__", "1.0.0")
+    with pytest.raises(SystemExit):
+        main("--version")
+
+    out = nocolorcapsys.stdout().strip()
+    assert out == "1.0.0"
+
+
+def test_fallback_skip_version_request(
+    tmp_path: Path, main: t.Any, make_readme: t.Any, patch_argv: t.Any
+) -> None:
+    """Test error handling when not printing version to commandline.
+
+    Test README is used if no args are provided and a README.rst file is
+    present in the current working dir.
+
+    :param tmp_path: Fixture for creating and returning temporary
+        directory.
+    :param make_readme: Create a README.rst file in the temp dir
+        containing the provided ``str``.
+    :param patch_argv:  Set args with ``sys.argv``. Clears pytest
+        arguments for this test.
+    """
+    patch_argv()
+    make_readme("")
+    with EnterDir(tmp_path):
+        main()

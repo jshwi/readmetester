@@ -12,6 +12,7 @@ from ._core import Readme as _Readme
 from ._core import color as _color
 from ._core import process as _process
 from ._core import run_assertion as _run_assertion
+from ._core import version_request as _version_request
 
 
 def main(path: _t.Union[str, _Path] = _Path.cwd() / "README.rst") -> None:
@@ -36,6 +37,7 @@ def main(path: _t.Union[str, _Path] = _Path.cwd() / "README.rst") -> None:
     :raises OutputDocumentError: Raise if the expected ``list`` contains
         nothing even though command output was captured.
     """
+    _version_request()
     parser = _Parser(path)
     holder = _Holder()
     readme = _Readme(parser.file)
