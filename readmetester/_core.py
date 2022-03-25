@@ -316,7 +316,3 @@ class Command(Seq):
         """Execute compiled Python command."""
         exec(str(self), globals())  # pylint: disable=exec-used
         self.clear()
-
-
-command = Command()
-parenthesis = Parenthesis()
