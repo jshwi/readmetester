@@ -43,9 +43,11 @@ class ArgumentParser(argparse.ArgumentParser):
         if len(sys.argv) < 2 and os.path.isfile(readme):
             sys.argv.append(readme)
 
-        super().__init__()
+        super().__init__(prog=color.cyan.get("readmetester"))
         self._version_request()
-        self.add_argument("file", action="store")
+        self.add_argument(
+            "file", metavar="README.rst", nargs="?", action="store"
+        )
         self.args = self.parse_args()
 
     def _version_request(self) -> None:

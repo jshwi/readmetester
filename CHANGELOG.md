@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Adds `--version` optional argument
 
+### Changed
+- Updates help
+
 [2.0.0](https://github.com/jshwi/readmetester/releases/tag/v2.0.0) - 2022-03-26
 ------------------------------------------------------------------------
 ### Removed
