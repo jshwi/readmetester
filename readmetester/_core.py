@@ -47,7 +47,13 @@ class Parser(_ArgumentParser):
 
     def __init__(self, path: _t.Union[str, _Path]) -> None:
         super().__init__()
-        self.add_argument("file", nargs="?", action="store", default=path)
+        self.add_argument(
+            "file",
+            metavar="README.rst",
+            nargs="?",
+            action="store",
+            default=path,
+        )
         self.add_argument(
             "--version", action="store_true", help="show version and exit"
         )
