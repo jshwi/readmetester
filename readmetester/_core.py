@@ -98,7 +98,7 @@ class _Seq(_MutableSequence):
         self._list.insert(index, value)
 
 
-class Readme(_Seq):  # pylint: disable=too-few-public-methods
+class Readme(_Seq):
     """Behaves like``list`` object.
 
     Read and hold ines from README file.
@@ -145,7 +145,7 @@ class Readme(_Seq):  # pylint: disable=too-few-public-methods
                 yield element
 
 
-class Actual(_Seq):  # pylint: disable=too-few-public-methods
+class Actual(_Seq):
     """``list`` for normalizing string entries for variable results."""
 
     def insert(self, index: int, value: str) -> None:
