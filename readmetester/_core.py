@@ -98,6 +98,147 @@ class _Seq(_MutableSequence):
         self._list.insert(index, value)
 
 
+class Code(str):
+    """Represents a line of code."""
+
+    _START_CODE = ">>> "
+    _CONTINUATION = "... "
+    _QUOTE = "'"
+    _START_BLOCK = ".. code-block:: python"
+    _END_DOT = ".."
+    _LINEBREAK = ""
+    _CODE_BREAK = ">>>"
+    _COLON = ":"
+    _COMMA = ","
+    _PARENS = "(", ")"
+    _CURLY = "{", "}"
+    _SQUARE = "[", "]"
+    _OPEN_BRACKETS = _PARENS[0], _CURLY[0], _SQUARE[0]
+    _CLOSE_BRACKETS = _PARENS[1], _CURLY[1], _SQUARE[1]
+    _BRACKETS = _OPEN_BRACKETS, _CLOSE_BRACKETS
+    _STARTERS = _START_CODE, _CONTINUATION
+    _CONTINUED = _COLON, _COMMA
+
+    def __new__(cls, item: str) -> Code:
+        return super().__new__(cls, item.lstrip())
+
+    def iscode(self) -> bool:
+        """Test if this is a line of code.
+
+        :return: Line of code, True or False.
+        """
+        return any(self.startswith(i) for i in self._STARTERS)
+
+    def iscodebreak(self) -> bool:
+        """Test if this is a code linebreak.
+
+        :return: Line of code, True or False.
+        """
+        return self == self._CODE_BREAK
+
+    def isquoted(self) -> bool:
+        """Test if this is quoted.
+
+        :return: Quoted, True or False.
+        """
+        return self.startswith(self._QUOTE) and self.endswith(self._QUOTE)
+
+    def dequote(self) -> Code:
+        """Return a ``Code`` instance without leading and ending quotes.
+
+        :return: Instance of ``Code`` without quotes.
+        """
+        return Code(self[1:-1:]) if self.isquoted() else self
+
+    def isstartblock(self) -> bool:
+        """Test that this starts a block.
+
+        :return: This starts a block, True or False.
+        """
+        return self == self._START_BLOCK
+
+    def isenddot(self) -> bool:
+        """Test that this is a dot to end a block.
+
+        :return: This an ending dot, True or False.
+        """
+        return self == self._END_DOT
+
+    def islinebreak(self) -> bool:
+        """Test that this is a linebreak.
+
+        :return: This an linebreak, True or False.
+        """
+        return self == self._LINEBREAK
+
+    def demark(self) -> Code:
+        """Return ``Code`` object without starter symbols.
+
+        :return: Instance of ``Code`` without starters.
+        """
+        return Code(self[4:])
+
+    def splitlines(self, keepends: bool = False) -> _t.List[str]:
+        return [Code(i) for i in super().splitlines(keepends)]
+
+    def iscontinued(self) -> bool:
+        """Test that this is a continuation of code.
+
+        :return: This an continuation, True or False.
+        """
+        return any(self.endswith(i) for i in self._CONTINUED)
+
+    def getcloser(self) -> Code:
+        """Return closing mark.
+
+        :return: Instance of closing ``Code``.
+        """
+        return Code(self[-1])
+
+    def isopenbracket(self) -> bool:
+        """Test that this is an opening bracket.
+
+        :return: This an opening bracket, True or False.
+        """
+        return self in self._OPEN_BRACKETS
+
+    def isbracket(self) -> bool:
+        """Test that this is a bracket.
+
+        :return: This a bracket, True or False.
+        """
+        return self.isopenbracket() or self.isclosebracket()
+
+    def isclosebracket(self) -> bool:
+        """Test that this is a closing bracket.
+
+        :return: This a closing bracket, True or False.
+        """
+        return self in self._CLOSE_BRACKETS
+
+    def getbracket(self) -> _t.Optional[Code]:
+        """Get bracket, if this is one.
+
+        :return: Bracket if it exists else None.
+        """
+        closer = self.getcloser()
+        return closer if closer.isbracket() else None
+
+    def getopbracket(self) -> _t.Optional[Code]:
+        """Get opposing bracket.
+
+        :return: Instance of opposite bracket ``Code``, else None
+        """
+        try:
+            return Code(
+                self._BRACKETS[int(self.isopenbracket())][
+                    self._BRACKETS[int(self.isclosebracket())].index(self)
+                ]
+            )
+        except ValueError:
+            return None
+
+
 class Readme(_Seq):
     """Behaves like``list`` object.
 
@@ -111,27 +252,25 @@ class Readme(_Seq):
         self._end_line_switch = False
         with open(filepath, encoding="utf-8") as fin:
             self.extend(
-                self._partition_blocks(
-                    iter([i.lstrip() for i in fin.read().splitlines()])
-                )
+                self._partition_blocks(iter(Code(fin.read()).splitlines()))
             )
 
     def _partition_blocks(
         self, elements: _t.Iterator[_t.Any], block: bool = False
     ) -> _t.Iterator[_t.Any]:
         for element in elements:
-            if element == ".. code-block:: python":
+            if element.isstartblock():
                 yield list(self._partition_blocks(elements, block=True))
 
             elif block:
-                if element == "..":
+                if element.isenddot():
 
                     # block completed with two dots and not a second
                     # newline
                     self._end_line_switch = False
                     return
 
-                if element == "":
+                if element.islinebreak():
 
                     # block completed with second newline
                     if self._end_line_switch:
@@ -319,37 +458,29 @@ class Holder:
 class Parenthesis(_Seq):
     """Record opening and closing parenthesis."""
 
-    _brackets = {"open": ("(", "{", "["), "close": (")", "}", "]")}
-
-    def _reverse(self, key: str, bracket: str) -> str:
-        other = "open" if key == "close" else "close"
-        return self._brackets[other][self._brackets[key].index(bracket)]
-
-    def _current(self) -> str:
-        return self[-1]
-
-    def eval(self, cmd: str) -> None:
+    def eval(self, cmd: Code) -> None:
         """Evaluate string to set bracket status to open or closed.
 
         :param cmd: Python code.
         """
-        bracket = cmd[-1]
-        if bracket in self._brackets["open"]:
-            self.append(bracket)
+        bracket = cmd.getbracket()
+        if bracket is not None:
+            if bracket.isopenbracket():
+                self.append(bracket)
 
-        elif (
-            bracket in self._brackets["close"]
-            and self
-            and self._current() == self._reverse("close", bracket)
-        ):
-            self.pop()
+            elif (
+                bracket.isclosebracket()
+                and self
+                and self[-1] == bracket.getopbracket()
+            ):
+                self.pop()
 
-    def command_ready(self, cmd: str) -> bool:
+    def command_ready(self, cmd: Code) -> bool:
         """Boolean value for whether command is ready to execute or not.
 
         :param cmd: Python code.
         """
-        return not any(cmd.endswith(i) for i in (":", ",")) and not self
+        return not cmd.iscontinued() and not self
 
 
 class Command(_Seq):
@@ -358,12 +489,12 @@ class Command(_Seq):
     def __str__(self) -> str:
         return "".join(self)
 
-    def append(self, value: str) -> None:
+    def append(self, value: Code) -> None:
         """Append line from statement minus the ">>> "  and "... ".
 
         :param value: Line of Python code.
         """
-        super().append(value[4:])
+        super().append(value.demark())
 
     def exec(self) -> None:
         """Execute compiled Python command."""

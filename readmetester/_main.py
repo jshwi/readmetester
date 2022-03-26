@@ -2,10 +2,12 @@
 readmetester
 ============
 """
+import typing as _t
 from itertools import zip_longest as _zip_longest
 
 from . import _assert
 from ._core import CatchStdout as _CatchStdout
+from ._core import Code as _Code
 from ._core import Command as _Command
 from ._core import Holder as _Holder
 from ._core import Parenthesis as _Parenthesis
@@ -13,7 +15,7 @@ from ._core import Parser as _Parser
 from ._core import Readme as _Readme
 
 
-def _process(lines: str, holder: _Holder) -> None:
+def _process(lines: _t.List[_Code], holder: _Holder) -> None:
     """Populate items to their allocated ``list`` object.
 
     First split data by documented commands and documented command
@@ -35,28 +37,26 @@ def _process(lines: str, holder: _Holder) -> None:
 
         # any lines beginning with ``>>> `` or ``... `` are considered
         # commands
-        if any(line.startswith(i) for i in (">>> ", "... ")):
+        if line.iscode():
             holder.total.append_command(line)
             command.append(line)
 
             # if command ends with a colon it is a statement with a
             # continuation
             # append the continuation to execute as one command
-            parenthesis.eval(str(command))
-            if parenthesis.command_ready(str(command)):
+            parenthesis.eval(_Code(str(command)))
+            if parenthesis.command_ready(_Code(str(command))):
                 with _CatchStdout() as stdout:
                     command.exec()
 
                 value = stdout.getparts()
                 if value is not None:
                     holder.catch_output(value)
-        elif line != ">>>":
+
+        elif not line.iscodebreak():
 
             # remove quotes from documented `str` output
-            if line.startswith("'") and line.endswith("'"):
-                line = line[1:-1:]
-
-            holder.expected.append(line)
+            holder.expected.append(line.dequote())
 
 
 def main() -> None:

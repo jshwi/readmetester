@@ -198,3 +198,10 @@ def test_print_version(
 
     out = nocolorcapsys.stdout().strip()
     assert out == "1.0.0"
+
+
+def test_getopbracket_not_bracket() -> None:
+    """Test ``getopbracket`` returns None when no brackets."""
+    # noinspection PyUnresolvedReferences
+    code = readmetester._core.Code("code")
+    assert code.getopbracket() is None
