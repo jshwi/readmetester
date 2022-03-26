@@ -2,8 +2,10 @@
 readmetester
 ============
 """
+import sys
 from itertools import zip_longest
 from typing import Optional
+from warnings import warn
 
 import restructuredtext_lint
 
@@ -114,6 +116,16 @@ def assert_syntax(path: str) -> None:
         raise exceptions.SyntaxDocumentError(errors[0].full_message)
 
 
+def assert_code_blocks(readme: Readme) -> None:
+    """If no code blocks in file, warn.
+
+    :param readme. Instantiated ``Readme`` object.
+    """
+    if not readme:
+        warn("file contains no code-blocks", RuntimeWarning)
+        sys.exit(0)
+
+
 def main() -> None:
     """Parse README from commandline argument and initialize ``Holder``
     to contain expected, actual, and total values. Enumerate over parsed
@@ -133,18 +145,16 @@ def main() -> None:
     holder = Holder()
     assert_syntax(parser.args.file)
     readme = Readme(parser.args.file)
-    if readme:
-        for count, element in enumerate(readme):
-            code_block = f"code-block {count + 1}"
-            holder.total.append_header(code_block)
-            process(element, holder)
-            for position, _ in enumerate(
-                zip_longest(holder.actual, holder.expected)
-            ):
-                actual, expected = holder.getpair(position)
-                actual_expected(actual, expected, code_block)
-                run_assertion(actual, expected, code_block)
+    assert_code_blocks(readme)
+    for count, element in enumerate(readme):
+        code_block = f"code-block {count + 1}"
+        holder.total.append_header(code_block)
+        process(element, holder)
+        for position, _ in enumerate(
+            zip_longest(holder.actual, holder.expected)
+        ):
+            actual, expected = holder.getpair(position)
+            actual_expected(actual, expected, code_block)
+            run_assertion(actual, expected, code_block)
 
-        holder.display()
-    else:
-        print("File contains no code-blocks")
+    holder.display()
