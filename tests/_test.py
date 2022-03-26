@@ -97,7 +97,7 @@ def test_fallback_readme(tmpdir, make_readme, patch_argv):
     assert parser.args.file == readme
 
 
-def test_no_code_block_found(make_readme, main, capsys):
+def test_no_code_block_found(make_readme, main):
     """Test appropriate stdout is produced when no code-block has been
     parsed from file.
 
@@ -107,12 +107,13 @@ def test_no_code_block_found(make_readme, main, capsys):
     :param main:        Mock the main function for the package. Provide
                         test arguments to ``sys.argv`` as function
                         parameters.
-    :param capsys:      ``pytest`` fixture for capturing output stream.
     """
     readme = make_readme("")
-    main(readme)
-    output = capsys.readouterr()
-    assert output.out.strip() == "File contains no code-blocks"
+    with pytest.raises(SystemExit):
+        with pytest.warns(
+            RuntimeWarning, match="file contains no code-blocks"
+        ):
+            main(str(readme))
 
 
 def test_seq():
