@@ -487,36 +487,12 @@ class Holder:
         return self.actual.getindex(index), self.expected.getindex(index)
 
 
-class Parenthesis(_Seq):
-    """Record opening and closing parenthesis."""
-
-    def eval(self, cmd: Code) -> None:
-        """Evaluate string to set bracket status to open or closed.
-
-        :param cmd: Python code.
-        """
-        bracket = cmd.getbracket()
-        if bracket is not None:
-            if bracket.isopenbracket():
-                self.append(bracket)
-
-            elif (
-                bracket.isclosebracket()
-                and self
-                and self[-1] == bracket.getopbracket()
-            ):
-                self.pop()
-
-    def command_ready(self, cmd: Code) -> bool:
-        """Boolean value for whether command is ready to execute or not.
-
-        :param cmd: Python code.
-        """
-        return not cmd.iscontinued() and not self
-
-
 class Command(_Seq):
     """Compile commands then execute the Python code."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._brackets: _t.List[str] = []
 
     def __str__(self) -> str:
         return "".join(self)
@@ -534,8 +510,30 @@ class Command(_Seq):
         :param value: Line of Python code.
         """
         super().append(value.demark())
+        self.eval()
 
     def exec(self) -> None:
         """Execute compiled Python command."""
         exec(str(self), globals())  # pylint: disable=exec-used
         self.clear()
+
+    def eval(self) -> None:
+        """Evaluate string to set bracket status to open or closed."""
+        bracket = self.ascode().getbracket()
+        if bracket is not None:
+            if bracket.isopenbracket():
+                self._brackets.append(bracket)
+
+            elif (
+                bracket.isclosebracket()
+                and self._brackets
+                and self._brackets[-1] == bracket.getopbracket()
+            ):
+                self._brackets.pop()
+
+    def ready(self) -> bool:
+        """bool value for whether command is ready to execute or not.
+
+        :return: Command is ready, True or False.
+        """
+        return not self.ascode().iscontinued() and not self._brackets

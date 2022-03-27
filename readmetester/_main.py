@@ -10,7 +10,6 @@ from ._core import CatchStdout as _CatchStdout
 from ._core import Code as _Code
 from ._core import Command as _Command
 from ._core import Holder as _Holder
-from ._core import Parenthesis as _Parenthesis
 from ._core import Parser as _Parser
 from ._core import Readme as _Readme
 
@@ -32,7 +31,6 @@ def _process(lines: _t.List[_Code], holder: _Holder) -> None:
     :param holder: Holding object.
     """
     command = _Command()
-    parenthesis = _Parenthesis()
     for line in lines:
 
         # any lines beginning with ``>>> `` or ``... `` are considered
@@ -40,13 +38,11 @@ def _process(lines: _t.List[_Code], holder: _Holder) -> None:
         if line.iscode():
             holder.total.append_command(line)
             command.append(line)
-            code = command.ascode()
 
             # if command ends with a colon it is a statement with a
             # continuation
             # append the continuation to execute as one command
-            parenthesis.eval(code)
-            if parenthesis.command_ready(code):
+            if command.ready():
                 with _CatchStdout() as stdout:
                     command.exec()
 
