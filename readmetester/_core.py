@@ -148,15 +148,11 @@ class Readme(_Seq):
 class Actual(_Seq):
     """``list`` for normalizing string entries for variable results."""
 
-    def insert(self, index: int, value: str) -> None:
-        """Remove hex substrings returned from classes.
-
-        :param index: ``list`` index to insert ``value``.
-        :param value: Value to insert into list.
-        """
+    @staticmethod
+    def _normalize_hex(value: str) -> str:
+        # remove hex substrings returned from classes
         string = []
         for substring in value.split(" "):
-            substring = substring.strip()
             if substring != "object":
                 if substring.startswith("0x"):
                     find_index = substring.find(">")
@@ -164,7 +160,10 @@ class Actual(_Seq):
 
                 string.append(substring)
 
-        super().insert(index, " ".join(string))
+        return " ".join(string)
+
+    def insert(self, index: int, value: str) -> None:
+        super().insert(index, self._normalize_hex(value))
 
     def getindex(self, index: int) -> _t.Optional[str]:
         """Get value by index if it exists, else None.
