@@ -121,7 +121,7 @@ class Readme(_Seq):
     ) -> _t.Iterator[_t.Any]:
         for element in elements:
             if element == ".. code-block:: python":
-                yield [*self._partition_blocks(elements, block=True)]
+                yield list(self._partition_blocks(elements, block=True))
 
             elif block:
                 if element == "..":

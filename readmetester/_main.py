@@ -86,8 +86,8 @@ def main() -> None:
     _assert.syntax(parser.file)
     readme = _Readme(parser.file)
     _assert.code_blocks(readme)
-    for count, element in enumerate(readme):
-        code_block = f"code-block {count + 1}"
+    for count, element in enumerate(readme, 1):
+        code_block = f"code-block {count}"
         holder.total.append_header(code_block)
         _process(element, holder)
         for position, _ in enumerate(
