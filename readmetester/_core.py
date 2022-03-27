@@ -239,6 +239,33 @@ class Code(str):
             return None
 
 
+class OpenReadme:
+    """Read README into a list of ``Code`` objects.
+
+    :param path: Path to README.
+    """
+
+    def __init__(self, path: _Path) -> None:
+        self._fin = open(  # pylint: disable=consider-using-with
+            path, encoding="utf-8"
+        )
+
+    def __enter__(self) -> OpenReadme:
+        return self
+
+    def __exit__(
+        self, exc_type: _t.Any, exc_val: _t.Any, exc_tb: _t.Any
+    ) -> None:
+        self._fin.close()
+
+    def read(self) -> Code:
+        """Read file contents into ``Code`` object.
+
+        :return: ``Code`` object.
+        """
+        return Code(self._fin.read())
+
+
 class Readme(_Seq):
     """Behaves like``list`` object.
 
@@ -282,8 +309,8 @@ class Readme(_Seq):
 
         :param path: Path to README.
         """
-        with open(path, encoding="utf-8") as fin:
-            self.extend(iter(Code(fin.read()).splitlines()))
+        with OpenReadme(path) as fin:
+            self.extend(fin.read().splitlines())
 
     def extend(self, values: _t.Iterable[_t.Any]) -> None:
         super().extend(self._partition_blocks(iter(values)))
