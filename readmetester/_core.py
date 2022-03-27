@@ -243,17 +243,11 @@ class Readme(_Seq):
     """Behaves like``list`` object.
 
     Read and hold ines from README file.
-
-    :param filepath: Path to README.rst file.
     """
 
-    def __init__(self, filepath: _Path) -> None:
+    def __init__(self) -> None:
         super().__init__()
         self._end_line_switch = False
-        with open(filepath, encoding="utf-8") as fin:
-            self.extend(
-                self._partition_blocks(iter(Code(fin.read()).splitlines()))
-            )
 
     def _partition_blocks(
         self, elements: _t.Iterator[_t.Any], block: bool = False
@@ -282,6 +276,17 @@ class Readme(_Seq):
                     continue
 
                 yield element
+
+    def load(self, path: _Path) -> None:
+        """Read README to object.
+
+        :param path: Path to README.
+        """
+        with open(path, encoding="utf-8") as fin:
+            self.extend(iter(Code(fin.read()).splitlines()))
+
+    def extend(self, values: _t.Iterable[_t.Any]) -> None:
+        super().extend(self._partition_blocks(iter(values)))
 
 
 class Actual(_Seq):
