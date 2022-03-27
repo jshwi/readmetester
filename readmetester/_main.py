@@ -40,12 +40,13 @@ def _process(lines: _t.List[_Code], holder: _Holder) -> None:
         if line.iscode():
             holder.total.append_command(line)
             command.append(line)
+            code = command.ascode()
 
             # if command ends with a colon it is a statement with a
             # continuation
             # append the continuation to execute as one command
-            parenthesis.eval(_Code(str(command)))
-            if parenthesis.command_ready(_Code(str(command))):
+            parenthesis.eval(code)
+            if parenthesis.command_ready(code):
                 with _CatchStdout() as stdout:
                     command.exec()
 

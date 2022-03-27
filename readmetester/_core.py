@@ -521,6 +521,13 @@ class Command(_Seq):
     def __str__(self) -> str:
         return "".join(self)
 
+    def ascode(self) -> Code:
+        """Return command as code.
+
+        :return: Instance of ``Code`` object.
+        """
+        return Code(str(self))
+
     def append(self, value: Code) -> None:
         """Append line from statement minus the ">>> "  and "... ".
 
