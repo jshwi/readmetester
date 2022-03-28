@@ -30,6 +30,7 @@ color.populate("fore")
 for foreground in color.colors:
     getattr(color, foreground).populate("effect")
 
+NAME = __name__.split(".", maxsplit=1)[0]
 CHECK = color.green.get("\u2713")
 CROSS = color.red.get("\u2716")
 
@@ -45,7 +46,7 @@ class Parser(_ArgumentParser):
         if len(_sys.argv) < 2 and readme.is_file():
             _sys.argv.append(str(readme))
 
-        super().__init__(prog=color.cyan.get("readmetester"))
+        super().__init__(prog=color.cyan.get(NAME))
         self._version_request()
         self.add_argument(
             "file", metavar="README.rst", nargs="?", action="store"
@@ -357,9 +358,7 @@ class Total(Actual):
         pyproject_file = _Path.cwd() / "pyproject.toml"
         if pyproject_file.is_file():
             pyproject_obj = _PyProject.load(pyproject_file)
-            style = pyproject_obj.tool.get("readmetester", {}).get(
-                "style", style
-            )
+            style = pyproject_obj.tool.get(NAME, {}).get("style", style)
 
         return _highlight(
             value, _PythonLexer(), _Terminal256Formatter(style=style)
