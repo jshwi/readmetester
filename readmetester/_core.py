@@ -31,6 +31,7 @@ for foreground in color.colors:
     getattr(color, foreground).populate("effect")
 
 NAME = __name__.split(".", maxsplit=1)[0]
+README = "README.rst"
 CHECK = color.green.get("\u2713")
 CROSS = color.red.get("\u2716")
 
@@ -42,15 +43,13 @@ class Parser(_ArgumentParser):
     """Parse commandline arguments and hold the file path."""
 
     def __init__(self) -> None:
-        readme = _Path.cwd() / "README.rst"
+        readme = _Path.cwd() / README
         if len(_sys.argv) < 2 and readme.is_file():
             _sys.argv.append(str(readme))
 
         super().__init__(prog=color.cyan.get(NAME))
         self._version_request()
-        self.add_argument(
-            "file", metavar="README.rst", nargs="?", action="store"
-        )
+        self.add_argument("file", metavar=README, nargs="?", action="store")
         self._args = self.parse_args()
         self.file = _Path(self._args.file)
 
