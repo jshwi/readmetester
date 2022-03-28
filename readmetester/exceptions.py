@@ -19,6 +19,10 @@ class OutputDocumentError(DocumentError):
         super().__init__(f"{code_block}: {message}")
 
 
+class SyntaxDocumentError(DocumentError):
+    """Base for errors resulting from invalid document syntax."""
+
+
 class OutputNotExpectedError(OutputDocumentError):
     """Output was provided, but no output is expected.
 

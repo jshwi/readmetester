@@ -5,6 +5,8 @@ readmetester
 from itertools import zip_longest
 from typing import Optional
 
+import restructuredtext_lint
+
 from . import exceptions
 from ._core import (
     CROSS,
@@ -102,6 +104,16 @@ def actual_expected(
         raise exceptions.OutputNotExpectedError(code_block, actual)
 
 
+def assert_syntax(path: str) -> None:
+    """Check README for valid syntax.
+
+    :param path: Path to README.
+    """
+    errors = restructuredtext_lint.lint_file(str(path))
+    if errors:
+        raise exceptions.SyntaxDocumentError(errors[0].full_message)
+
+
 def main() -> None:
     """Parse README from commandline argument and initialize ``Holder``
     to contain expected, actual, and total values. Enumerate over parsed
@@ -119,6 +131,7 @@ def main() -> None:
     """
     parser = ArgumentParser()
     holder = Holder()
+    assert_syntax(parser.args.file)
     readme = Readme(parser.args.file)
     if readme:
         for count, element in enumerate(readme):

@@ -57,6 +57,7 @@ def test_returns(nocolorcapsys, main, make_readme, template, expected):
         "output-expected",
         "actual-ne-multi",
         "actual-ne-multi-block",
+        "bad-syntax",
     ],
 )
 def test_output_document_error(main, make_readme, template, expected, error):

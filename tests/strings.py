@@ -794,3 +794,32 @@ class OutputNEMultiBlockError(TemplateExpectedError):
     @property
     def expected(self) -> str:
         return "code-block 1: command did not return `2 two` which is expected"
+
+
+@register_error
+class InvalidSyntax(TemplateExpectedError):
+    """Test for code-block containing a hanging dict."""
+
+    @property
+    def template(self) -> str:
+        return """
+.. code-block:: python
+    >>> print("Hello, world!")
+    'Hello, world!'
+
+"""
+
+    @property
+    def expected(self) -> str:
+        return """\
+Error in "code-block" directive:
+maximum 1 argument(s) allowed, 6 supplied.
+
+.. code-block:: python
+    >>> print("Hello, world!")
+    'Hello, world!'
+"""
+
+    @property
+    def error(self) -> t.Type[readmetester.exceptions.DocumentError]:
+        return readmetester.exceptions.SyntaxDocumentError
