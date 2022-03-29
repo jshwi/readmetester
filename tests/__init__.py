@@ -4,6 +4,7 @@ tests
 """
 import os
 import re
+from pathlib import Path
 
 
 class NoColorCapsys:
@@ -70,8 +71,8 @@ class EnterDir:
     """
 
     def __init__(self, new_path):
-        self.saved_path = os.getcwd()
-        self.enter_path = os.path.expanduser(new_path)
+        self.saved_path = Path.cwd()
+        self.enter_path = new_path.expanduser()
 
     def __enter__(self):
         os.chdir(self.enter_path)

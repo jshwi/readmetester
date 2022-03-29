@@ -4,6 +4,7 @@ readmetester._assert
 """
 import sys as _sys
 import typing as _t
+from pathlib import Path as _Path
 from warnings import warn as _warn
 
 import restructuredtext_lint as _restructuredtext_lint
@@ -54,7 +55,7 @@ def actual_expected(
         raise _exceptions.OutputNotExpectedError(code_block, actual)
 
 
-def syntax(path: str) -> None:
+def syntax(path: _Path) -> None:
     """Check README for valid syntax.
 
     :param path: Path to README.

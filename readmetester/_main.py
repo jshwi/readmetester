@@ -74,8 +74,8 @@ def main() -> None:
     """
     parser = _Parser()
     holder = _Holder()
-    _assert.syntax(parser.args.file)
-    readme = _Readme(parser.args.file)
+    _assert.syntax(parser.file)
+    readme = _Readme(parser.file)
     _assert.code_blocks(readme)
     for count, element in enumerate(readme):
         code_block = f"code-block {count + 1}"
