@@ -316,7 +316,7 @@ class Readme(_Seq):
         super().extend(self._partition_blocks(iter(values)))
 
 
-class Actual(_Seq):
+class _Result(_Seq):
     """``list`` for normalizing string entries for variable results."""
 
     @staticmethod
@@ -348,7 +348,11 @@ class Actual(_Seq):
             return None
 
 
-class Total(Actual):
+class Actual(_Result):
+    """``list`` for normalizing string entries for variable results."""
+
+
+class Total(_Result):
     """List containing total output to display."""
 
     @staticmethod
@@ -397,7 +401,7 @@ class Total(Actual):
         return "\n".join(self)
 
 
-class Expected(Actual):
+class Expected(_Result):
     """t.List containing expected code."""
 
     def append(self, value: str) -> None:
