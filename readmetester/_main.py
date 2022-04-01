@@ -2,6 +2,9 @@
 readmetester
 ============
 """
+from itertools import zip_longest
+from typing import Optional
+
 from . import exceptions
 from ._core import (
     CROSS,
@@ -58,25 +61,45 @@ def process(lines: str, holder: Holder) -> None:
             holder.expected.append(line)
 
 
-def run_assertion(holder: Holder, position: int, code_block: str) -> None:
+def run_assertion(
+    actual: Optional[str], expected: Optional[str], code_block: str
+) -> None:
     """Test actual value against expected value.
 
-    :param holder:                  Object containing expected, actual,
-                                    and total values.
-    :param position:                Index of expected and actual lists.
+    :param actual:                  Actual command output.
+    :param expected:                Expected command output.
     :param code_block:              code-block x of all code-blocks.
     :raises OutputDocumentError:    If assertion fails.
     """
-    actual = holder.actual[position]
-    expected = holder.expected[position]
-    try:
-        assert actual == expected
+    if actual is not None and expected is not None:
+        try:
+            assert actual == expected
 
-    except AssertionError as err:
-        print(CROSS)
-        raise exceptions.OutputDocumentError(
-            f"{code_block}: {expected} != {actual}"
-        ) from err
+        except AssertionError as err:
+            print(CROSS)
+            raise exceptions.OutputNotEqualError(
+                code_block, actual, expected
+            ) from err
+
+
+def actual_expected(
+    actual: Optional[str], expected: Optional[str], code_block: str
+) -> None:
+    """Test equality of actual and expected results.
+
+    :param actual:                  Actual output produced.
+    :param expected:                Expected output to be produced.
+    :param code_block:              code-block x of all code-blocks.
+    :raise OutputExpectedError:     Raises if output expected but none
+                                    was produced.
+    :raise OutputNotExpectedError:  Raises if output was not expected
+                                    and output was produced.
+    """
+    if actual is None and expected is not None:
+        raise exceptions.OutputExpectedError(code_block, expected)
+
+    if actual is not None and expected is None:
+        raise exceptions.OutputNotExpectedError(code_block, actual)
 
 
 def main() -> None:
@@ -102,13 +125,12 @@ def main() -> None:
             code_block = f"code-block {count + 1}"
             holder.total.append_header(code_block)
             process(element, holder)
-            if not holder.expected and holder.actual:
-                raise exceptions.OutputDocumentError(
-                    "command returned output but no output is expected"
-                )
-
-            for position, _ in enumerate(holder.actual):
-                run_assertion(holder, position, code_block)
+            for position, _ in enumerate(
+                zip_longest(holder.actual, holder.expected)
+            ):
+                actual, expected = holder.getpair(position)
+                actual_expected(actual, expected, code_block)
+                run_assertion(actual, expected, code_block)
 
         holder.display()
     else:

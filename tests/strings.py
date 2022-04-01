@@ -6,6 +6,8 @@ import os
 import typing as t
 from abc import ABC, abstractmethod
 
+import readmetester.exceptions
+
 templates = []
 errors = []
 
@@ -27,6 +29,25 @@ class TemplateExpected(ABC):
         """Expected result."""
 
 
+class TemplateExpectedError(TemplateExpected):
+    """Base class for README template/expected tests for errors."""
+
+    @property
+    @abstractmethod
+    def template(self) -> str:
+        """Template to test."""
+
+    @property
+    @abstractmethod
+    def expected(self) -> str:
+        """Expected result."""
+
+    @property
+    @abstractmethod
+    def error(self) -> t.Type[readmetester.exceptions.DocumentError]:
+        """Expected error."""
+
+
 def register_template(
     template_expected: t.Type[TemplateExpected],
 ) -> t.Type[TemplateExpected]:
@@ -41,16 +62,16 @@ def register_template(
 
 
 def register_error(
-    template_expected: t.Type[TemplateExpected],
-) -> t.Type[TemplateExpected]:
+    template_expected_error: t.Type[TemplateExpectedError],
+) -> t.Type[TemplateExpectedError]:
     """Register template/expected str objects for testing errors.
 
-    :param template_expected: ``TemplateExpected`` object.
-    :returns: ``TemplateExpected`` object.
+    :param template_expected_error: ``TemplateExpectedError`` object.
+    :returns: ``TemplateExpectedError`` object.
     """
-    instance = template_expected()
-    errors.append((instance.template, instance.expected))
-    return template_expected
+    instance = template_expected_error()
+    errors.append((instance.template, instance.expected, instance.error))
+    return template_expected_error
 
 
 @register_template
@@ -64,7 +85,7 @@ class Simple(TemplateExpected):
 
     >>> print("Hello, world!")
     'Hello, world!'
-..
+
 """
 
     @property
@@ -91,7 +112,7 @@ class SimpleLineBreak(TemplateExpected):
     >>> print("Hello, world!")
     'Hello, world!'
     'Hello, world!'
-..
+
 """
 
     @property
@@ -107,7 +128,7 @@ code-block 1
 
 
 @register_template
-class SimpleNoEndingDots(TemplateExpected):
+class EndingDots(TemplateExpected):
     """Test for simple code-block with no closing dots."""
 
     @property
@@ -117,10 +138,12 @@ class SimpleNoEndingDots(TemplateExpected):
 
     >>> print("Hello, world!")
     'Hello, world!'
-    
+..
 .. code-block:: python
+
     >>> print("Hello, world!")
     'Hello, world!'
+..
 """
 
     @property
@@ -133,6 +156,123 @@ code-block 1
 code-block 2
 . >>> print("Hello, world!")
 {self.CHECK} Hello, world!
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class NoEndingDots(TemplateExpected):
+    """Test for simple code-block with no closing dots."""
+
+    @property
+    def template(self) -> str:
+        return """
+.. code-block:: python
+
+    >>> print("Hello, world!")
+    'Hello, world!'
+
+.. code-block:: python
+
+    >>> print("Hello, world!")
+    'Hello, world!'
+
+"""
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> print("Hello, world!")
+{self.CHECK} Hello, world!
+
+code-block 2
+. >>> print("Hello, world!")
+{self.CHECK} Hello, world!
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class NoEndingDotsBrackets(TemplateExpected):
+    """Test for code-block containing a hanging dict."""
+
+    @property
+    def template(self) -> str:
+        return """
+.. code-block:: python
+
+    >>> d = {
+    ...     "one": 1,
+    ...     "two": 2,
+    ...     "three": 3,
+    ...     "four": 4,
+    ...     "five": 5,
+    ... }
+
+.. code-block:: python
+
+    >>> print("Hello, world!")
+    'Hello, world!'
+
+"""
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> d = {{
+. ...     "one": 1,
+. ...     "two": 2,
+. ...     "three": 3,
+. ...     "four": 4,
+. ...     "five": 5,
+. ... }}
+
+code-block 2
+. >>> print("Hello, world!")
+✓ Hello, world!
+{self.SUCCESS}\
+"""
+
+
+@register_template
+class NoEndingDotsBracketsNoMatch(TemplateExpected):
+    """Test for code-block containing a hanging dict."""
+
+    @property
+    def template(self) -> str:
+        return """
+.. code-block:: python
+
+    >>> d = {
+    ...     "one": 1,
+    ...     "two": 2,
+    ...     "three": 3,
+    ...     "four": 4,
+    ...     "five": 5,
+
+.. code-block:: python
+
+    >>> print("Hello, world!")
+    'Hello, world!'
+
+"""
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> d = {{
+. ...     "one": 1,
+. ...     "two": 2,
+. ...     "three": 3,
+. ...     "four": 4,
+. ...     "five": 5,
+
+code-block 2
+. >>> print("Hello, world!")
+✓ Hello, world!
 {self.SUCCESS}\
 """
 
@@ -170,7 +310,7 @@ class Multiline(TemplateExpected):
     7 negative
     8 empty
     9 strikethrough
-..
+
 """
 
     @property
@@ -219,7 +359,7 @@ class ObjectCheck(TemplateExpected):
     >>> o = Object()
     >>> print(o)
     <readmetester._core.Object object at 0x7f4f52cf12e0>
-..
+
 """
 
     @property
@@ -260,7 +400,8 @@ class HangingTuple(TemplateExpected):
     3 three
     4 four
     5 five
-.."""
+
+"""
 
     @property
     def expected(self) -> str:
@@ -311,7 +452,7 @@ class HangingList(TemplateExpected):
     3 three
     4 four
     5 five
-..
+
 """
 
     @property
@@ -346,6 +487,7 @@ class HangingDict(TemplateExpected):
     def template(self) -> str:
         return """
 .. code-block:: python
+
     >>> d = {
     ...     "one": 1,
     ...     "two": 2,
@@ -360,7 +502,7 @@ class HangingDict(TemplateExpected):
     three 3
     four 4
     five 5
-..
+
 """
 
     @property
@@ -393,6 +535,7 @@ class NestedHanging(TemplateExpected):
     def template(self) -> str:
         return """
 .. code-block:: python
+
     >>> n = {
     ...     "nested": (
     ...         "a",
@@ -405,7 +548,7 @@ class NestedHanging(TemplateExpected):
     a
     nested
     tuple
-..
+
 """
 
     @property
@@ -464,8 +607,42 @@ code-block 2
 """
 
 
+@register_template
+class NoOutputOrExpected(TemplateExpected):
+    """Test against the README of this project."""
+
+    @property
+    def template(self) -> str:
+        return """
+.. code-block:: python
+
+    >>> n = {
+    ...     "nested": (
+    ...         "a",
+    ...         "nested",
+    ...         "tuple",
+    ...     )
+    ... }
+
+"""
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> n = {{
+. ...     "nested": (
+. ...         "a",
+. ...         "nested",
+. ...         "tuple",
+. ...     )
+. ... }}
+{self.SUCCESS}\
+"""
+
+
 @register_error
-class ErrorNoOutputExpected(TemplateExpected):
+class OutputNotExpectedError(TemplateExpectedError):
     """Test error when output expected and expected is not provided."""
 
     @property
@@ -473,17 +650,21 @@ class ErrorNoOutputExpected(TemplateExpected):
         return """
 .. code-block:: python
 
-    >>> print("Hello, world")
-..
+    >>> import os
+    'Hello, world!'
 """
 
     @property
     def expected(self) -> str:
-        return "command returned output but no output is expected"
+        return "code-block 1: command did not return `Hello, world!` which is expected"
+
+    @property
+    def error(self) -> t.Type[readmetester.exceptions.DocumentError]:
+        return readmetester.exceptions.OutputExpectedError
 
 
 @register_error
-class ErrorActualNeExpected(TemplateExpected):
+class OutputNotEqualError(TemplateExpectedError):
     """Test error when actual result is not equal to expected."""
 
     @property
@@ -495,9 +676,121 @@ class ErrorActualNeExpected(TemplateExpected):
     'Hello, world!'
     >>> print("Goodbye, world...")
     'Hello, world!'
-..
+
 """
 
     @property
     def expected(self) -> str:
         return "code-block 1: Hello, world! != Goodbye, world..."
+
+    @property
+    def error(self) -> t.Type[readmetester.exceptions.DocumentError]:
+        return readmetester.exceptions.OutputNotEqualError
+
+
+@register_error
+class OutputExpectedError(TemplateExpectedError):
+    """Test error when output expected and expected is not provided."""
+
+    @property
+    def template(self) -> str:
+        return """
+.. code-block:: python
+
+    >>> print("Hello, world")
+
+"""
+
+    @property
+    def expected(self) -> str:
+        return "code-block 1: command returned `Hello, world` which is not expected"
+
+    @property
+    def error(self) -> t.Type[readmetester.exceptions.DocumentError]:
+        return readmetester.exceptions.OutputNotExpectedError
+
+
+@register_error
+class OutputNEMultiError(TemplateExpectedError):
+    """Test error when output expected and expected is not provided."""
+
+    _ACTUAL = """\
+0 zero
+1 one\
+"""
+    _EXPECTED = """\
+0 zero
+1 one
+2 two\
+"""
+
+    @property
+    def template(self) -> str:
+        return """
+.. code-block:: python
+
+    >>> n = [
+    ...     "zero",
+    ...     "one",
+    ... ]
+    >>> for c, i in enumerate(n):
+    ...     print(c, i)
+    0 zero
+    1 one
+    2 two
+
+"""
+
+    @property
+    def error(self) -> t.Type[readmetester.exceptions.DocumentError]:
+        return readmetester.exceptions.OutputExpectedError
+
+    @property
+    def expected(self) -> str:
+        return "code-block 1: command did not return `2 two` which is expected"
+
+
+@register_error
+class OutputNEMultiBlockError(TemplateExpectedError):
+    """Test error when output expected and expected is not provided."""
+
+    _ACTUAL = """\
+0 zero
+1 one\
+"""
+    _EXPECTED = """\
+0 zero
+1 one
+2 two\
+"""
+
+    @property
+    def template(self) -> str:
+        return """
+.. code-block:: python
+
+    >>> n = [
+    ...     "zero",
+    ...     "one"
+    ... ]
+    >>> for c, i in enumerate(n):
+    ...     print(c, i)
+    0 zero
+    1 one
+    2 two
+
+.. code-block:: python
+
+    >>> import readmetester
+    >>> readmetester.main()
+    'recursive exec not implemented'
+
+"""
+
+    @property
+    def error(self) -> t.Type[readmetester.exceptions.DocumentError]:
+        return readmetester.exceptions.OutputExpectedError
+
+    @property
+    def expected(self) -> str:
+        return "code-block 1: command did not return `2 two` which is expected"
