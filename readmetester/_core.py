@@ -183,6 +183,13 @@ class Total(Actual):
         """
         super().append("\n".join([f"{CHECK} {i}" for i in values]))
 
+    def get(self) -> str:
+        """Get the final total result.
+
+        :return: Final total result.
+        """
+        return "\n".join(self)
+
 
 class Expected(Actual):
     """List containing expected code."""

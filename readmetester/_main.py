@@ -110,9 +110,7 @@ def main() -> None:
             for position, _ in enumerate(holder["actual"]):
                 run_assertion(holder, position, code_block)
 
-            for line in holder["total"]:
-                print(line)
-
+            print(holder["total"].get())
             holder.clear()
 
         print(f"\n{80 * '-'}\n{color.green.bold.get('Success!')}")
