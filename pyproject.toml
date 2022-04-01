@@ -26,6 +26,7 @@ authors = ["jshwi <stephen@jshwisolutions.com>"]
 description = "Parse, test, and assert RST code-blocks"
 license = "MIT"
 name = "readmetester"
+readme = "README.rst"
 version = "2.0.0"
 
 [tool.poetry.dependencies]
