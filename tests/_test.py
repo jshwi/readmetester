@@ -120,16 +120,6 @@ def test_seq():
     assert seq_str == "[]"
 
 
-def test_mapping():
-    """Get coverage on ``Mapping`` abstract methods."""
-    # noinspection PyUnresolvedReferences
-    mapping = readmetester._core.Mapping()
-    mapping_repr = repr(mapping)
-    assert mapping_repr == "<Mapping {}>"
-    mapping_str = str(mapping)
-    assert mapping_str == "{}"
-
-
 def test_no_pyproject_toml(tmpdir, main, make_readme, patch_argv):
     """Test no error is raised when no pyproject.toml in project.
 

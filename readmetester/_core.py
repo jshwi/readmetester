@@ -11,7 +11,7 @@ import io
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Union
+from typing import Any, Iterator, List, Union
 
 import object_colors
 from pygments import highlight
@@ -223,50 +223,44 @@ class CatchStdout(io.StringIO):
         sys.stdout = self._freeze
 
 
-class Mapping(collections.MutableMapping):
-    """Inherit to replicate subclassing of ``dict`` objects."""
-
-    def __init__(self) -> None:
-        self._dict: Dict[Any, Any] = {}
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__} {self._dict}>"
-
-    def __str__(self) -> str:
-        return str(self._dict)
-
-    def __getitem__(self, key: Any) -> Any:
-        return self._dict[key]
-
-    def __setitem__(self, key: Any, value: Any) -> Any:
-        self._dict[key] = value
-
-    def __delitem__(self, key: Any) -> Any:
-        del self._dict[key]
-
-    def __iter__(self) -> Iterator[Any]:
-        return iter(self._dict)
-
-    def __len__(self) -> int:
-        """Not implemented."""
-
-
-class Holder(Mapping):  # pylint: disable=too-few-public-methods
+class Holder:
     """Object for holding README data."""
+
+    _SUCCESS_MESSAGE = f"\n{80 * '-'}\n{color.green.bold.get('Success!')}"
 
     def __init__(self) -> None:
         super().__init__()
-        self._init_object()
+        self._actual = Actual()
+        self._expected = Expected()
+        self._total = Total()
 
-    def _init_object(self) -> None:
-        self.update(
-            {"actual": Actual(), "expected": Expected(), "total": Total()}
-        )
+    @property
+    def actual(self) -> Actual:
+        """``list`` containing actual code."""
+        return self._actual
 
-    def clear(self) -> None:
-        """Clear contents but maintain initial key-value pairs."""
-        super().clear()
-        self._init_object()
+    @property
+    def expected(self) -> Expected:
+        """``list`` containing expected code."""
+        return self._expected
+
+    @property
+    def total(self) -> Total:
+        """``list`` containing total to display."""
+        return self._total
+
+    def catch_output(self, value: List[str]) -> None:
+        """Capture command output and add to actual and total objects.
+
+        :param value: Output from executed command.
+        """
+        self._actual.extend(value)
+        self._total.extend(value)
+
+    def display(self) -> None:
+        """Consume the total command, actual, and expected result."""
+        print(self.total.get())
+        print(self._SUCCESS_MESSAGE)
 
 
 class Parenthesis(Seq):

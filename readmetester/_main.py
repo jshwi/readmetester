@@ -9,7 +9,6 @@ from ._core import (
     CatchStdout,
     Holder,
     Readme,
-    color,
     command,
     parenthesis,
 )
@@ -34,7 +33,7 @@ def process(lines: str, holder: Holder) -> None:
         # any lines beginning with ``>>> `` or ``... `` are
         # considered commands
         if any(line.startswith(i) for i in (">>> ", "... ")):
-            holder["total"].append_command(line)
+            holder.total.append_command(line)
             command.append(line)
 
             # if command ends with a colon if is a statement with a
@@ -47,15 +46,14 @@ def process(lines: str, holder: Holder) -> None:
 
                 value = stdout.getvalue()
                 if value is not None:
-                    holder["actual"].extend(value)
-                    holder["total"].extend(value)
+                    holder.catch_output(value)
         elif line != ">>>":
 
             # remove quotes from documented ``str`` output
             if line.startswith("'") and line.endswith("'"):
                 line = line[1:-1:]
 
-            holder["expected"].append(line)
+            holder.expected.append(line)
 
 
 def run_assertion(holder: Holder, position: int, code_block: str) -> None:
@@ -67,8 +65,8 @@ def run_assertion(holder: Holder, position: int, code_block: str) -> None:
     :param code_block:              code-block x of all code-blocks.
     :raises OutputDocumentError:    If assertion fails.
     """
-    actual = holder["actual"][position]
-    expected = holder["expected"][position]
+    actual = holder.actual[position]
+    expected = holder.expected[position]
     try:
         assert actual == expected
 
@@ -100,19 +98,16 @@ def main() -> None:
     if readme:
         for count, element in enumerate(readme):
             code_block = f"code-block {count + 1}"
-            holder["total"].append_header(code_block)
+            holder.total.append_header(code_block)
             process(element, holder)
-            if not holder["expected"] and holder["actual"]:
+            if not holder.expected and holder.actual:
                 raise exceptions.OutputDocumentError(
                     "command returned output but no output is expected"
                 )
 
-            for position, _ in enumerate(holder["actual"]):
+            for position, _ in enumerate(holder.actual):
                 run_assertion(holder, position, code_block)
 
-            print(holder["total"].get())
-            holder.clear()
-
-        print(f"\n{80 * '-'}\n{color.green.bold.get('Success!')}")
+        holder.display()
     else:
         print("File contains no code-blocks")
