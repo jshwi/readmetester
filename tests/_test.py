@@ -16,7 +16,10 @@ from . import EnterDir, strings
     ids=[
         "simple",
         "simple-line-break",
-        "simple-no-ending-dots",
+        "ending-dots",
+        "no-ending-dots",
+        "no-ending-dots-brackets",
+        "no-ending-dots-brackets-no-match",
         "multiple",
         "object",
         "hanging-tuple",
@@ -24,6 +27,7 @@ from . import EnterDir, strings
         "hanging-dict",
         "nested-hanging",
         "this-readme",
+        "no-output-or-expected",
     ],
 )
 def test_returns(nocolorcapsys, main, make_readme, template, expected):
@@ -45,11 +49,17 @@ def test_returns(nocolorcapsys, main, make_readme, template, expected):
 
 
 @pytest.mark.parametrize(
-    "template,expected",
+    "template,expected,error",
     strings.errors,
-    ids=["no-output-expected", "actual-ne-expected"],
+    ids=[
+        "no-output-expected",
+        "actual-ne-expected",
+        "output-expected",
+        "actual-ne-multi",
+        "actual-ne-multi-block",
+    ],
 )
-def test_output_document_error(main, make_readme, template, expected):
+def test_output_document_error(main, make_readme, template, expected, error):
     """Test error when no output documentation provided.
 
     :param main:            Mock the main function for the package.
@@ -61,7 +71,7 @@ def test_output_document_error(main, make_readme, template, expected):
     :param expected:        Expected output.
     """
     readme = make_readme(template)
-    with pytest.raises(readmetester.exceptions.OutputDocumentError) as err:
+    with pytest.raises(error) as err:
         main(readme)
 
     assert str(err.value) == expected

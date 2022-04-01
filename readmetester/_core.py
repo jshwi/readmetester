@@ -11,7 +11,7 @@ import io
 import os
 import sys
 from pathlib import Path
-from typing import Any, Iterator, List, Union
+from typing import Any, Iterator, List, Optional, Tuple, Union
 
 import object_colors
 from pygments import highlight
@@ -155,6 +155,17 @@ class Actual(Seq):  # pylint: disable=too-few-public-methods
 
         super().insert(index, " ".join(string))
 
+    def getindex(self, index: int) -> Optional[str]:
+        """Get value by index if it exists, else None.
+
+        :param index: Index to get.
+        :return: Value if it exists, else None.
+        """
+        try:
+            return self[index]
+        except IndexError:
+            return None
+
 
 class Total(Actual):
     """List containing total output to display."""
@@ -277,6 +288,14 @@ class Holder:
         """Consume the total command, actual, and expected result."""
         print(self.total.get())
         print(self._SUCCESS_MESSAGE)
+
+    def getpair(self, index: int) -> Tuple[Optional[str], Optional[str]]:
+        """Get actual and expected results.
+
+        :param index: Index of each respectively.
+        :return: A tuple of actual and expected results.
+        """
+        return self.actual.getindex(index), self.expected.getindex(index)
 
 
 class Parenthesis(Seq):
