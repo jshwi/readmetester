@@ -38,7 +38,7 @@ End a code block with another blank line
 
 **Usage**
 
-``readmetester [-h] file``
+``readmetester [-h] [--version] [README.rst]``
 
 If a README.rst file is present in the current working directory it will be used if no arguments are provided
 
