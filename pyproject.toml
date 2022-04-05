@@ -27,7 +27,7 @@ description = "Parse, test, and assert RST code-blocks"
 license = "MIT"
 name = "readmetester"
 readme = "README.rst"
-version = "2.1.0"
+version = "2.2.0"
 
 [tool.poetry.dependencies]
 Pygments = "^2.8.1"
