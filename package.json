@@ -1,6 +1,6 @@
 {
   "name": "readmetester",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Intuitive Git for Python",
   "private": true,
   "directories": {
