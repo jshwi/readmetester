@@ -12,6 +12,7 @@ from ._core import Command as _Command
 from ._core import Holder as _Holder
 from ._core import Parser as _Parser
 from ._core import Readme as _Readme
+from ._core import exec_status as _exec_status
 
 
 def _process(lines: _t.List[_Code], holder: _Holder) -> None:
@@ -84,15 +85,18 @@ def main() -> None:
     readme = _Readme()
     readme.load(parser.file)
     _assert.code_blocks(readme)
-    for count, element in enumerate(readme, 1):
-        code_block = f"code-block {count}"
-        holder.total.append_header(code_block)
-        _process(element, holder)
-        for position, _ in enumerate(
-            _zip_longest(holder.actual, holder.expected)
-        ):
-            actual, expected = holder.getpair(position)
-            _assert.actual_expected(actual, expected, code_block)
-            _assert.equality(actual, expected, code_block)
+    if _exec_status.in_exec:
+        print("recursive exec not implemented")
+    else:
+        for count, element in enumerate(readme, 1):
+            code_block = f"code-block {count}"
+            holder.total.append_header(code_block)
+            _process(element, holder)
+            for position, _ in enumerate(
+                _zip_longest(holder.actual, holder.expected)
+            ):
+                actual, expected = holder.getpair(position)
+                _assert.actual_expected(actual, expected, code_block)
+                _assert.equality(actual, expected, code_block)
 
-    holder.display()
+        holder.display()

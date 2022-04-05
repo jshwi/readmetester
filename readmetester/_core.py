@@ -5,6 +5,7 @@ readmetester._core
 # pylint: disable=consider-using-f-string
 from __future__ import annotations
 
+import contextlib as _contextlib
 import os as _os
 import sys as _sys
 import typing as _t
@@ -37,6 +38,25 @@ CROSS = color.red.get("\u2716")
 
 
 _os.environ["PYCHARM_HOSTED"] = "True"
+
+
+class ExecStatus:
+    """Holds status of running exec."""
+
+    def __init__(self) -> None:
+        self._switch = False
+
+    @property
+    def in_exec(self) -> bool:
+        """Running in exec, True or False."""
+        return self._switch
+
+    @_contextlib.contextmanager
+    def context(self) -> _t.Generator[ExecStatus, None, None]:
+        """Run exec within context."""
+        self._switch = True
+        yield self
+        self._switch = False
 
 
 class Parser(_ArgumentParser):
@@ -516,8 +536,9 @@ class Command(_Seq):
 
     def exec(self) -> None:
         """Execute compiled Python command."""
-        exec(str(self), globals())  # pylint: disable=exec-used
-        self.clear()
+        with exec_status.context():
+            exec(str(self), globals())  # pylint: disable=exec-used
+            self.clear()
 
     def eval(self) -> None:
         """Evaluate string to set bracket status to open or closed."""
@@ -539,3 +560,6 @@ class Command(_Seq):
         :return: Command is ready, True or False.
         """
         return not self.ascode().iscontinued() and not self._brackets
+
+
+exec_status = ExecStatus()

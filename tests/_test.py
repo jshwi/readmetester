@@ -39,6 +39,7 @@ from . import (
         "nested-hanging",
         "this-readme",
         "no-output-or-expected",
+        "recursive-exec",
     ],
 )
 def test_returns(

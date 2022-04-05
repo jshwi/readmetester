@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/readmetester/compare/v2.1.0...HEAD)
 ------------------------------------------------------------------------
+### Fixed
+- Prevents recursively executing self
 
 [2.1.0](https://github.com/jshwi/readmetester/releases/tag/v2.1.0) - 2022-04-02
 ------------------------------------------------------------------------

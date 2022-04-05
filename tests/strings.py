@@ -641,6 +641,31 @@ code-block 1
 """
 
 
+@register_template
+class RecursiveExec(TemplateExpected):
+    """Test output of recursive exec."""
+
+    @property
+    def template(self) -> str:
+        return """
+.. code-block:: python
+
+    >>> import readmetester
+    >>> readmetester.main()
+    'recursive exec not implemented'
+"""
+
+    @property
+    def expected(self) -> str:
+        return f"""\
+code-block 1
+. >>> import readmetester
+. >>> readmetester.main()
+{self.CHECK} recursive exec not implemented
+{self.SUCCESS}\
+"""
+
+
 @register_error
 class OutputNotExpectedError(TemplateExpectedError):
     """Test error when output expected and expected is not provided."""
