@@ -4,6 +4,7 @@ readmetester
 """
 import typing as _t
 from itertools import zip_longest as _zip_longest
+from pathlib import Path as _Path
 
 from . import _assert
 from ._core import CatchStdout as _CatchStdout
@@ -57,7 +58,7 @@ def _process(lines: _t.List[_Code], holder: _Holder) -> None:
             holder.expected.append(line.dequote())
 
 
-def main() -> None:
+def main(path: _t.Optional[_t.Union[str, _Path]] = None) -> None:
     """Parse README from commandline argument.
 
     Initialize ``Holder`` to contain expected, actual, and total values.
@@ -79,11 +80,14 @@ def main() -> None:
     :raises OutputDocumentError: Raise if the expected ``list`` contains
         nothing even though command output was captured.
     """
-    parser = _Parser()
+    if path is None:
+        parser = _Parser()
+        path = parser.file
+
     holder = _Holder()
-    _assert.syntax(parser.file)
+    _assert.syntax(path)
     readme = _Readme()
-    readme.load(parser.file)
+    readme.load(path)
     _assert.code_blocks(readme)
     if _exec_status.in_exec:
         print("recursive exec not implemented")

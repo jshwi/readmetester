@@ -55,7 +55,7 @@ def actual_expected(
         raise _exceptions.OutputNotExpectedError(code_block, actual)
 
 
-def syntax(path: _Path) -> None:
+def syntax(path: _t.Union[str, _Path]) -> None:
     """Check README for valid syntax.
 
     :param path: Path to README.

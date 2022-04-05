@@ -91,3 +91,12 @@ Styles can be configured in a pyproject.toml file
 
     [tool.readmetester]
     style = "monokai"
+
+
+Using `readmetester` API
+
+.. code-block:: python
+
+    >>> import readmetester
+    >>> readmetester.main()
+    'recursive exec not implemented'

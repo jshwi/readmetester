@@ -265,7 +265,7 @@ class OpenReadme:
     :param path: Path to README.
     """
 
-    def __init__(self, path: _Path) -> None:
+    def __init__(self, path: _t.Union[str, _Path]) -> None:
         self._fin = open(  # pylint: disable=consider-using-with
             path, encoding="utf-8"
         )
@@ -324,7 +324,7 @@ class Readme(_Seq):
 
                 yield element
 
-    def load(self, path: _Path) -> None:
+    def load(self, path: _t.Union[str, _Path]) -> None:
         """Read README to object.
 
         :param path: Path to README.

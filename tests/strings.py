@@ -603,6 +603,11 @@ code-block 2
 {self.CHECK} 0 zero
 {self.CHECK} 1 one
 {self.CHECK} 2 two
+
+code-block 3
+. >>> import readmetester
+. >>> readmetester.main()
+{self.CHECK} recursive exec not implemented
 {self.SUCCESS}\
 """
 
