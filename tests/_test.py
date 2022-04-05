@@ -206,3 +206,28 @@ def test_getopbracket_not_bracket() -> None:
     # noinspection PyUnresolvedReferences
     code = readmetester._core.Code("code")
     assert code.getopbracket() is None
+
+
+def test_readme_no_exist(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, patch_argv: PatchArgvType
+) -> None:
+    """Test that ``IndexError`` is not raised by version request.
+
+    Instead, ``restructuredtext_lint`` should raise
+    ``FileNotFoundError``.
+
+    :param tmp_path: Fixture for creating and returning temporary
+        directory.
+    :param monkeypatch: Mock patch environment and attributes.
+    :param patch_argv: Set args with ``sys.argv``. Clears pytest
+        arguments for this test.
+    """
+    patch_argv()
+    monkeypatch.setattr("readmetester._core._Path.cwd", lambda: tmp_path)
+    with pytest.raises(FileNotFoundError) as err:
+        readmetester.main()
+
+    assert (
+        str(err.value)
+        == f"[Errno 2] No such file or directory: '{Path.cwd() /'README.rst'}'"
+    )

@@ -64,7 +64,7 @@ class Parser(_ArgumentParser):
 
     def __init__(self) -> None:
         readme = _Path.cwd() / README
-        if len(_sys.argv) < 2 and readme.is_file():
+        if len(_sys.argv) < 2:
             _sys.argv.append(str(readme))
 
         super().__init__(prog=color.cyan.get(NAME))
