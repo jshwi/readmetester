@@ -28,14 +28,6 @@ Parse and test README.rst Python code-blocks
     $ pip install readmetester
 ..
 
-Code blocks need to begin with
-
-``.. code-block:: python``
-
-followed by a blank line
-
-End a code block with another blank line
-
 **Usage**
 
 ``readmetester [-h] [--version] [README.rst]``
@@ -49,16 +41,16 @@ If a README.rst file is present in the current working directory it will be used
 
 **Documenting**
 
-Documented code needs to be indented
-
 Python code begins with ``">>> "``
+
+Continuation lines begin with ``"... "``
 
 .. note::
 
-    The length of the string is 4 including the whitespace at the end
+    The length of these strings is 4 including the whitespace at the end
 ..
 
-Expected output can be single quoted or unquoted (no double quotes)
+Expected output can be quoted or unquoted
 
 .. code-block:: RST
 
@@ -66,8 +58,6 @@ Expected output can be single quoted or unquoted (no double quotes)
 
         >>> print("Hello, world!")
         'Hello, world!'
-
-Continuation lines begin with ``"... "``
 
 .. code-block:: RST
 
@@ -99,4 +89,4 @@ Using `readmetester` API
 
     >>> import readmetester
     >>> readmetester.main()
-    'recursive exec not implemented'
+    "recursive exec not implemented"

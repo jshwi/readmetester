@@ -123,7 +123,8 @@ class Code(str):
 
     _START_CODE = ">>> "
     _CONTINUATION = "... "
-    _QUOTE = "'"
+    _SINGLE_QUOTE = "'"
+    _DOUBLE_QUOTE = '"'
     _START_BLOCK = ".. code-block:: python"
     _END_DOT = ".."
     _LINEBREAK = ""
@@ -138,6 +139,7 @@ class Code(str):
     _BRACKETS = _OPEN_BRACKETS, _CLOSE_BRACKETS
     _STARTERS = _START_CODE, _CONTINUATION
     _CONTINUED = _COLON, _COMMA
+    _QUOTES = _SINGLE_QUOTE, _DOUBLE_QUOTE
 
     def __new__(cls, item: str) -> Code:
         return super().__new__(cls, item.lstrip())
@@ -156,12 +158,26 @@ class Code(str):
         """
         return self == self._CODE_BREAK
 
+    def startswithquote(self) -> bool:
+        """Test if this starts with a quote.
+
+        :return: Starts with a quote, True or False.
+        """
+        return any(self.startswith(i) for i in self._QUOTES)
+
+    def endswithquote(self) -> bool:
+        """Test if this ends with a quote.
+
+        :return: Ends with a quote, True or False.
+        """
+        return any(self.endswith(i) for i in self._QUOTES)
+
     def isquoted(self) -> bool:
         """Test if this is quoted.
 
         :return: Quoted, True or False.
         """
-        return self.startswith(self._QUOTE) and self.endswith(self._QUOTE)
+        return self.startswithquote() and self.endswithquote()
 
     def dequote(self) -> Code:
         """Return a ``Code`` instance without leading and ending quotes.

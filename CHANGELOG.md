@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/readmetester/compare/v2.2.0...HEAD)
 ------------------------------------------------------------------------
+### Added
+- Allows double quotes for expected output
 
 [2.2.0](https://github.com/jshwi/readmetester/releases/tag/v2.2.0) - 2022-04-05
 ------------------------------------------------------------------------
