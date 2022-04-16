@@ -2,12 +2,12 @@
 tests._test
 ===========
 """
-import typing as t
 
 # pylint: disable=protected-access
 from pathlib import Path
 
 import pytest
+import templatest
 
 import readmetester
 
@@ -17,35 +17,19 @@ from . import (
     MockMainType,
     NoColorCapsys,
     PatchArgvType,
-    strings,
 )
 
 
 @pytest.mark.parametrize(
-    "template,expected",
-    strings.templates,
-    ids=[
-        "simple",
-        "simple-line-break",
-        "ending-dots",
-        "no-ending-dots",
-        "no-ending-dots-brackets",
-        "no-ending-dots-brackets-no-match",
-        "multiple",
-        "object",
-        "hanging-tuple",
-        "hanging-list",
-        "hanging-dict",
-        "nested-hanging",
-        "this-readme",
-        "no-output-or-expected",
-        "recursive-exec",
-    ],
+    "_,template,expected",
+    templatest.templates.registered.filtergroup("err"),
+    ids=templatest.templates.registered.filtergroup("err").getids(),
 )
 def test_returns(
     nocolorcapsys: NoColorCapsys,
     main: MockMainType,
     make_readme: MakeReadmeType,
+    _: str,
     template: str,
     expected: str,
 ) -> None:
@@ -66,23 +50,16 @@ def test_returns(
 
 
 @pytest.mark.parametrize(
-    "template,expected,error",
-    strings.errors,
-    ids=[
-        "no-output-expected",
-        "actual-ne-expected",
-        "output-expected",
-        "actual-ne-multi",
-        "actual-ne-multi-block",
-        "bad-syntax",
-    ],
+    "_,template,expected",
+    templatest.templates.registered.getgroup("err"),
+    ids=templatest.templates.registered.getgroup("err").getids(),
 )
 def test_output_document_error(
     main: MockMainType,
     make_readme: MakeReadmeType,
+    _: str,
     template: str,
     expected: str,
-    error: t.Type[readmetester.exceptions.DocumentError],
 ) -> None:
     """Test error when no output documentation provided.
 
@@ -94,7 +71,7 @@ def test_output_document_error(
     :param expected: Expected output.
     """
     readme = make_readme(template)
-    with pytest.raises(error) as err:
+    with pytest.raises(readmetester.exceptions.DocumentError) as err:
         main(str(readme))
 
     assert str(err.value) == expected
@@ -176,7 +153,7 @@ def test_no_pyproject_toml(
         arguments for this test.
     """
     patch_argv()
-    readme = make_readme(strings.Simple().template)
+    readme = make_readme(templatest.templates.registered[0][1])
     with EnterDir(tmp_path):
         main(str(readme))
 

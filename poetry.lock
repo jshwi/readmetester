@@ -1251,6 +1251,14 @@ pure-eval = "*"
 tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
+name = "templatest"
+version = "0.2.0"
+description = "Templates for testing with strings"
+category = "dev"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -1376,7 +1384,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c8f56382f972031eec7466b066169f0ea485c78dd3195dd516769a87cd1a233a"
+content-hash = "c141be639dd712c70829f2491713c777aeb2709eb2a0f730ae42f8e1c2677042"
 
 [metadata.files]
 alabaster = [
@@ -1926,6 +1934,10 @@ sphinxcontrib-serializinghtml = [
 stack-data = [
     {file = "stack_data-0.6.2-py3-none-any.whl", hash = "sha256:cbb2a53eb64e5785878201a97ed7c7b94883f48b87bfb0bbe8b623c74679e4a8"},
     {file = "stack_data-0.6.2.tar.gz", hash = "sha256:32d2dd0376772d01b6cb9fc996f3c8b57a357089dec328ed4b6553d037eaf815"},
+]
+templatest = [
+    {file = "templatest-0.2.0-py3-none-any.whl", hash = "sha256:ae97f74e7d6e15cf03aa4bdd41b2ea4ad1382e08b784bedea3b1b68487448101"},
+    {file = "templatest-0.2.0.tar.gz", hash = "sha256:f9fa40face64046f3d8acd9456b7034f8b0a6b125a42d98abd50f7cc5d8bb787"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
