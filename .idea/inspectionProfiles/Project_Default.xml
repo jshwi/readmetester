@@ -18,8 +18,7 @@
     </inspection_tool>
     <inspection_tool class="PoetryPackageVersionsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
-      <scope name="tests.files" level="WEAK WARNING" enabled="false" />
-      <scope name="tests.strings" level="WEAK WARNING" enabled="false" />
+      <scope name="tests.__init__" level="WEAK WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <scope name="app.dom.renderers" level="WEAK WARNING" enabled="false" />
