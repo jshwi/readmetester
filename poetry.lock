@@ -839,7 +839,7 @@ diagrams = ["railroad-diagrams", "jinja2"]
 
 [[package]]
 name = "pyproject-parser"
-version = "0.4.3"
+version = "0.5.0"
 description = "Parser for 'pyproject.toml'"
 category = "main"
 optional = false
@@ -857,8 +857,8 @@ toml = ">=0.10.2"
 typing-extensions = ">=3.7.4.3"
 
 [package.extras]
-all = ["click (>=7.1.2)", "consolekit (>=1.2.0)", "docutils (==0.16)", "readme-renderer[md] (>=27.0)"]
-cli = ["click (>=7.1.2)", "consolekit (>=1.2.0)"]
+all = ["click (>=7.1.2)", "consolekit (>=1.2.0)", "docutils (==0.16)", "readme-renderer[md] (>=27.0)", "sdjson (>=0.3.1)"]
+cli = ["click (>=7.1.2)", "consolekit (>=1.2.0)", "sdjson (>=0.3.1)"]
 readme = ["docutils (==0.16)", "readme-renderer[md] (>=27.0)"]
 
 [[package]]
@@ -1298,7 +1298,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "4d59d9045b943e4603705f92680433909073e57d33d969b2705d9b8b4fc4bcbb"
+content-hash = "4faf8dc3a7ec20d6ac453f0623dd566206c517927175c7ec42f5edbf7b5a9fd1"
 
 [metadata.files]
 alabaster = [
@@ -1731,8 +1731,8 @@ pyparsing = [
     {file = "pyparsing-3.0.8.tar.gz", hash = "sha256:7bf433498c016c4314268d95df76c81b842a4cb2b276fa3312cfb1e1d85f6954"},
 ]
 pyproject-parser = [
-    {file = "pyproject-parser-0.4.3.tar.gz", hash = "sha256:63fb38ea8b7b3d7922e69872af9fc11e604bad7bdb4435dc7fc8366fae3ed457"},
-    {file = "pyproject_parser-0.4.3-py3-none-any.whl", hash = "sha256:60d9bb9cf411250a1c071788f90202e6fdb6d02954e30cd8fb854433877e0de0"},
+    {file = "pyproject-parser-0.5.0.tar.gz", hash = "sha256:e4194ad8315b55a948bf62e48d42f0951a24ab6fad7b0bc9cb79b347ad5c2cbe"},
+    {file = "pyproject_parser-0.5.0-py3-none-any.whl", hash = "sha256:8c17efe2c03bff9759db048a2d8c1190664ef2ae62dfc1d3edf44d8fd5d021e5"},
 ]
 pytest = [
     {file = "pytest-7.1.2-py3-none-any.whl", hash = "sha256:13d0e3ccfc2b6e26be000cb6568c832ba67ba32e719443bfe725814d3c42433c"},
