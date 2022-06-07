@@ -32,7 +32,7 @@ version = "2.3.0"
 [tool.poetry.dependencies]
 Pygments = "^2.8.1"
 object-colors = "^2.0.0"
-pyproject-parser = ">=0.4.3,<0.7.0"
+pyproject-parser = ">=0.4.3,<0.8.0"
 python = "^3.8"
 restructuredtext-lint = "^1.4.0"
 
