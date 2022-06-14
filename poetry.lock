@@ -1179,7 +1179,7 @@ tests = ["pytest", "typeguard", "pygments", "littleutils", "cython"]
 
 [[package]]
 name = "templatest"
-version = "0.3.0"
+version = "0.4.0"
 description = "Templates for testing with strings"
 category = "dev"
 optional = false
@@ -1310,7 +1310,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "bc9246e424e7c42a7cd46f6da90eae41f64f7d210c8d7dd8d7fa2b3a48e1882d"
+content-hash = "840d06da9e00baf86713f0a0398932893e6a51ebffac0cb21f510ea382658b09"
 
 [metadata.files]
 alabaster = [
@@ -1841,8 +1841,8 @@ stack-data = [
     {file = "stack_data-0.2.0.tar.gz", hash = "sha256:45692d41bd633a9503a5195552df22b583caf16f0b27c4e58c98d88c8b648e12"},
 ]
 templatest = [
-    {file = "templatest-0.3.0-py3-none-any.whl", hash = "sha256:b99ed6ca6ba6c58d36fcafa605020e98c6e10ab9865f6bd52254d88e46e1fb97"},
-    {file = "templatest-0.3.0.tar.gz", hash = "sha256:f1596907a1b68df21052d24a1d42d4af2c1764eb62ecdad766123c58ea8b39e8"},
+    {file = "templatest-0.4.0-py3-none-any.whl", hash = "sha256:f6087927d12310f0dd590a1b15cfabbcb23c119805e9184f8353c8fb978a386c"},
+    {file = "templatest-0.4.0.tar.gz", hash = "sha256:48534596e8ef2f936a524dae5813fa08996da85404a823f5ef5cba4d75380f3a"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
