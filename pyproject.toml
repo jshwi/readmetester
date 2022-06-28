@@ -39,7 +39,7 @@ restructuredtext-lint = "^1.4.0"
 [tool.poetry.dev-dependencies]
 bump2version = "^1.0.1"
 ipython = "^8.4.0"
-prompt-toolkit = "^3.0.29"
+prompt-toolkit = "^3.0.30"
 pyaud = "^3.13.5"
 pytest = "^7.1.2"
 pytest-randomly = "^3.12.0"
