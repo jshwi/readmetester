@@ -11,7 +11,7 @@
     "toml:sort": "poetry run toml-sort pyproject.toml --in-place --all",
     "audit": "npm-run-all audit:* && npm run toml:sort",
     "audit:misc": "npx prettier -c .",
-    "audit:py": "poetry run pyaud audit --deploy --rcfile .github/pyaud.toml",
+    "audit:py": "poetry run pyaud audit",
     "bump:major": "poetry run bump2version major",
     "bump:minor": "poetry run bump2version minor",
     "bump:patch": "poetry run bump2version patch",
