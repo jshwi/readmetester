@@ -85,7 +85,7 @@ python-versions = "*"
 six = "*"
 
 [package.extras]
-test = ["astroid", "pytest"]
+test = ["pytest", "astroid"]
 
 [[package]]
 name = "atomicwrites"
@@ -354,10 +354,10 @@ marshmallow = ">=3.0.0"
 python-dotenv = "*"
 
 [package.extras]
-dev = ["pytest", "dj-database-url", "dj-email-url", "django-cache-url", "flake8 (==4.0.1)", "flake8-bugbear (==21.9.2)", "mypy (==0.910)", "pre-commit (>=2.4,<3.0)", "tox"]
-django = ["dj-database-url", "dj-email-url", "django-cache-url"]
-lint = ["flake8 (==4.0.1)", "flake8-bugbear (==21.9.2)", "mypy (==0.910)", "pre-commit (>=2.4,<3.0)"]
-tests = ["pytest", "dj-database-url", "dj-email-url", "django-cache-url"]
+tests = ["django-cache-url", "dj-email-url", "dj-database-url", "pytest"]
+lint = ["pre-commit (>=2.4,<3.0)", "mypy (==0.910)", "flake8-bugbear (==21.9.2)", "flake8 (==4.0.1)"]
+django = ["django-cache-url", "dj-email-url", "dj-database-url"]
+dev = ["tox", "pre-commit (>=2.4,<3.0)", "mypy (==0.910)", "flake8-bugbear (==21.9.2)", "flake8 (==4.0.1)", "django-cache-url", "dj-email-url", "dj-database-url", "pytest"]
 
 [[package]]
 name = "executing"
@@ -489,10 +489,10 @@ optional = false
 python-versions = ">=3.6.1,<4.0"
 
 [package.extras]
-pipfile_deprecated_finder = ["pipreqs", "requirementslib"]
-requirements_deprecated_finder = ["pipreqs", "pip-api"]
-colors = ["colorama (>=0.4.3,<0.5.0)"]
 plugins = ["setuptools"]
+colors = ["colorama (>=0.4.3,<0.5.0)"]
+requirements_deprecated_finder = ["pip-api", "pipreqs"]
+pipfile_deprecated_finder = ["requirementslib", "pipreqs"]
 
 [[package]]
 name = "jedi"
@@ -620,9 +620,9 @@ tomli = ">=1.1.0"
 typing-extensions = ">=3.10"
 
 [package.extras]
-dmypy = ["psutil (>=4.0)"]
-python2 = ["typed-ast (>=1.4.0,<2)"]
 reports = ["lxml"]
+python2 = ["typed-ast (>=1.4.0,<2)"]
+dmypy = ["psutil (>=4.0)"]
 
 [[package]]
 name = "mypy-extensions"
@@ -836,11 +836,14 @@ vulture = ">=2.3,<3.0"
 
 [[package]]
 name = "pygments"
-version = "2.12.0"
+version = "2.13.0"
 description = "Pygments is a syntax highlighting package written in Python."
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[package.extras]
+plugins = ["importlib-metadata"]
 
 [[package]]
 name = "pylint"
@@ -1092,9 +1095,9 @@ sphinxcontrib-qthelp = "*"
 sphinxcontrib-serializinghtml = ">=1.1.5"
 
 [package.extras]
+test = ["typed-ast", "cython", "html5lib", "pytest-cov", "pytest"]
+lint = ["types-requests", "types-typed-ast", "docutils-stubs", "mypy (>=0.931)", "isort", "flake8 (>=3.5.0)"]
 docs = ["sphinxcontrib-websupport"]
-lint = ["flake8 (>=3.5.0)", "isort", "mypy (>=0.931)", "docutils-stubs", "types-typed-ast", "types-requests"]
-test = ["pytest", "pytest-cov", "html5lib", "cython", "typed-ast"]
 
 [[package]]
 name = "sphinxcontrib-applehelp"
@@ -1183,8 +1186,8 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "stack-data"
@@ -1776,8 +1779,8 @@ pyaud-plugins = [
     {file = "pyaud_plugins-0.8.0-py3-none-any.whl", hash = "sha256:a2b6b72d006aaf3325aa40d84581ef819f2e1cdebd5648663fdb96a98bd1b5a2"},
 ]
 pygments = [
-    {file = "Pygments-2.12.0-py3-none-any.whl", hash = "sha256:dc9c10fb40944260f6ed4c688ece0cd2048414940f1cea51b8b226318411c519"},
-    {file = "Pygments-2.12.0.tar.gz", hash = "sha256:5eb116118f9612ff1ee89ac96437bb6b49e8f04d8a13b514ba26f620208e26eb"},
+    {file = "Pygments-2.13.0-py3-none-any.whl", hash = "sha256:f643f331ab57ba3c9d89212ee4a2dabc6e94f117cf4eefde99a0574720d14c42"},
+    {file = "Pygments-2.13.0.tar.gz", hash = "sha256:56a8508ae95f98e2b9bdf93a6be5ae3f7d8af858b43e02c5a2ff083726be40c1"},
 ]
 pylint = [
     {file = "pylint-2.13.7-py3-none-any.whl", hash = "sha256:13ddbbd8872c804574149e81197c28877eba75224ba6b76cd8652fc31df55c1c"},
