@@ -44,7 +44,7 @@ pyaud = "^4.0.2"
 pytest = "^7.2.0"
 pytest-randomly = "^3.12.0"
 restview = "^3.0.0"
-templatest = "^0.5.0"
+templatest = "^0.7.0"
 toml-sort = "^0.20.1"
 
 [tool.poetry.scripts]
