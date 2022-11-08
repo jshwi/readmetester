@@ -1188,7 +1188,7 @@ tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
 name = "templatest"
-version = "0.5.0"
+version = "0.6.0"
 description = "Templates for testing with strings"
 category = "dev"
 optional = false
@@ -1327,7 +1327,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "bef80217bea612f2d49e3ae9ab258214913c39a6f480850b7b9fdc148ea3eb41"
+content-hash = "f16e599f279ccae24575b4da6636f883b42d8a1a510dca80ddd54d668692dd18"
 
 [metadata.files]
 alabaster = [
@@ -1864,8 +1864,8 @@ stack-data = [
     {file = "stack_data-0.5.0.tar.gz", hash = "sha256:715c8855fbf5c43587b141e46cc9d9339cc0d1f8d6e0f98ed0d01c6cb974e29f"},
 ]
 templatest = [
-    {file = "templatest-0.5.0-py3-none-any.whl", hash = "sha256:2ead1c7671aaaa2d6bad15f8f9b6d7d7b46c82b67ef10e3a848d5ee38cf31fff"},
-    {file = "templatest-0.5.0.tar.gz", hash = "sha256:23d8ae7dd902147b8027ab537aec1f74a2c138d9bc30912af161513721c13d8d"},
+    {file = "templatest-0.6.0-py3-none-any.whl", hash = "sha256:f9534493e92228379927b888753589bcd559140e85c8aa5a153aa8324623cbb1"},
+    {file = "templatest-0.6.0.tar.gz", hash = "sha256:c343bd39b3a58128b8d991cb99f41b6d120ba5eac96f95066e5a4b447174c28e"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
