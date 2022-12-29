@@ -49,6 +49,7 @@ def fixture_make_readme(tmp_path: Path) -> MakeReadmeType:
 
     :param tmp_path: Fixture for creating and returning temporary
         directory.
+    :return: Function for using this fixture.
     """
 
     def _make_readme(template: str) -> Path:

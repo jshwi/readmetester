@@ -148,6 +148,7 @@ def test_no_pyproject_toml(
 
     :param tmp_path: Fixture for creating and returning temporary
         directory.
+    :param main: Patch package entry point.
     :param make_readme: Create a README.rst file in the temp dir
         containing the provided ``str``.
     :param patch_argv: Set args with ``sys.argv``. Clears pytest
