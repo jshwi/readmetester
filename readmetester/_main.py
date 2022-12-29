@@ -77,6 +77,7 @@ def main(path: _t.Optional[_t.Union[str, _Path]] = None) -> None:
     If no errors are raised then print that the README is a success and
     there are no errors in testing.
 
+    :param path: Path to README.
     :raises OutputDocumentError: Raise if the expected ``list`` contains
         nothing even though command output was captured.
     """
