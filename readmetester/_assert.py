@@ -68,7 +68,7 @@ def syntax(path: _t.Union[str, _Path]) -> None:
 def code_blocks(readme: _Readme) -> None:
     """If no code blocks in file, warn.
 
-    :param readme. Instantiated ``Readme`` object.
+    :param readme: Instantiated ``Readme`` object.
     """
     if not readme:
         _warn("file contains no code-blocks", RuntimeWarning)
