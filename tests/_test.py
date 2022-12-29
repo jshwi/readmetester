@@ -20,12 +20,13 @@ from . import (
     NoColorCapsys,
     PatchArgvType,
 )
+from .strings import ERROR
 
 
 @pytest.mark.parametrize(
     "_,template,expected",
-    templatest.templates.registered.filtergroup("err"),
-    ids=templatest.templates.registered.filtergroup("err").getids(),
+    templatest.templates.registered.filtergroup(ERROR),
+    ids=templatest.templates.registered.filtergroup(ERROR).getids(),
 )
 def test_returns(
     nocolorcapsys: NoColorCapsys,
@@ -53,8 +54,8 @@ def test_returns(
 
 @pytest.mark.parametrize(
     "_,template,expected",
-    templatest.templates.registered.getgroup("err"),
-    ids=templatest.templates.registered.getgroup("err").getids(),
+    templatest.templates.registered.getgroup(ERROR),
+    ids=templatest.templates.registered.getgroup(ERROR).getids(),
 )
 def test_output_document_error(
     main: MockMainType,
