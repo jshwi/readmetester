@@ -36,7 +36,7 @@ pyproject-parser = ">=0.4.3,<0.8.0"
 python = "^3.8"
 restructuredtext-lint = "^1.4.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 bump2version = "^1.0.1"
 ipython = "^8.6.0"
 prompt-toolkit = "^3.0.36"
