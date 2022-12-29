@@ -308,7 +308,7 @@ class OpenReadme:
 class Readme(_Seq):
     """Behaves like``list`` object.
 
-    Read and hold ines from README file.
+    Read and hold lines from README file.
     """
 
     def __init__(self) -> None:
