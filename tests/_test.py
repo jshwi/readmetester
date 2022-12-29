@@ -11,6 +11,8 @@ import templatest
 
 import readmetester
 
+# noinspection PyUnresolvedReferences
+from . import templates  # noqa pylint: disable=unused-import
 from . import (
     EnterDir,
     MakeReadmeType,
