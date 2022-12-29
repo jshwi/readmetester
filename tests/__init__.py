@@ -604,10 +604,6 @@ class _ThisReadme(BaseTemplate):
     def expected(self) -> str:
         return f"""\
 code-block 1
-. >>> print("Hello, world!")
-{CHECK} Hello, world!
-
-code-block 2
 . >>> n = [
 . ...     "zero",
 . ...     "one",
@@ -618,11 +614,6 @@ code-block 2
 {CHECK} 0 zero
 {CHECK} 1 one
 {CHECK} 2 two
-
-code-block 3
-. >>> import readmetester
-. >>> readmetester.main()
-{CHECK} recursive exec not implemented
 {SUCCESS}\
 """
 
