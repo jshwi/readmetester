@@ -53,7 +53,10 @@ class ExecStatus:
 
     @_contextlib.contextmanager
     def context(self) -> _t.Generator[ExecStatus, None, None]:
-        """Run exec within context."""
+        """Run exec within context.
+
+        :return: Yield self.
+        """
         self._switch = True
         yield self
         self._switch = False
