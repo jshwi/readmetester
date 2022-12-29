@@ -1,14 +1,34 @@
 {
-  "name": "readmetester",
-  "version": "2.3.0",
+  "author": "Stephen Whitlock",
+  "bugs": {
+    "url": "https://github.com/jshwi/readmetester/issues"
+  },
   "description": "Intuitive Git for Python",
-  "private": true,
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.5.1"
+  },
   "directories": {
     "doc": "docs",
     "test": "tests"
   },
+  "homepage": "https://jshwi.github.io/readmetester/",
+  "keywords": [
+    "python3.8",
+    "git",
+    "commandline",
+    "wrapper",
+    "script",
+    "tree"
+  ],
+  "license": "MIT",
+  "name": "readmetester",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jshwi/readmetester.git"
+  },
   "scripts": {
-    "toml:sort": "poetry run toml-sort pyproject.toml --in-place --all",
     "audit": "npm-run-all audit:* && npm run toml:sort",
     "audit:misc": "npx prettier -c .",
     "audit:py": "poetry run pyaud audit",
@@ -24,28 +44,8 @@
     "format:py:str": "poetry run pyaud format-str",
     "lint": "poetry run pyaud lint",
     "test": "poetry run pyaud tests",
+    "toml:sort": "poetry run toml-sort pyproject.toml --in-place --all",
     "types": "poetry run pyaud typecheck"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jshwi/readmetester.git"
-  },
-  "keywords": [
-    "python3.8",
-    "git",
-    "commandline",
-    "wrapper",
-    "script",
-    "tree"
-  ],
-  "author": "Stephen Whitlock",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jshwi/readmetester/issues"
-  },
-  "homepage": "https://jshwi.github.io/readmetester/",
-  "devDependencies": {
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.5.1"
-  }
+  "version": "2.3.0"
 }
