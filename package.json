@@ -52,5 +52,5 @@
     "toml:sort": "poetry run pyaud sort-pyproject",
     "types": "poetry run pyaud typecheck"
   },
-  "version": "2.3.0"
+  "version": "2.4.0"
 }
