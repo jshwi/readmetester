@@ -1,0 +1,6 @@
+- id: readmetester
+  name: readmetester
+  entry: readmetester
+  description: parse, test, and assert rst code-blocks
+  language: python
+  types: [python]
