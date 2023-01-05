@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "readmetester"
-copyright = "2021, Stephen Whitlock"
+copyright = "2023, Stephen Whitlock"
 author = "Stephen Whitlock"
 
 # The full version, including alpha/beta/rc tags
