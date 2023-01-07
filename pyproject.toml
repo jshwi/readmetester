@@ -67,7 +67,7 @@ maintainers = [
 name = "readmetester"
 readme = "README.rst"
 repository = "https://github.com/jshwi/readmetester"
-version = "2.4.0"
+version = "2.4.1"
 
 [tool.poetry.dependencies]
 Pygments = "^2.8.1"
